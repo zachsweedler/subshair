@@ -5,7 +5,6 @@ import Hero from "@/components/homepage/Hero";
 import MapPreview from "@/components/homepage/MapPreview";
 import Product from "@/components/homepage/Product";
 import { Container, Section } from "@/components/homepage/Styles";
-import Image from "next/image";
 
 export const metadata = {
   title: "SubShair | Real Estate Listings for Rental Arbitrage",
