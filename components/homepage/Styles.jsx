@@ -1,0 +1,17 @@
+'use client'
+import styled from 'styled-components'
+
+export const Section = styled.div`
+  background-color: white;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 250;
+  padding: 70px 30px;
+  overflow: hidden;
+`;
+
+export const Container = styled.div`
+  max-width: ${({theme})=> theme.container.width.lg};
+  margin: 0 auto;
+`;

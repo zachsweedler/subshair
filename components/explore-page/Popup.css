@@ -1,0 +1,9 @@
+  .mapboxgl-popup-close-button {
+    display: none;
+  }
+  
+  .mapboxgl-popup-content {
+    padding: 0;
+    width: 290px;
+    border-radius: 6px;
+  }
