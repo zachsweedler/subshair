@@ -9,14 +9,21 @@ export default async function AvatarServer() {
 
     const { data: {session}, error: sessionError } = await supabase.auth.getSession();
 
-    if (sessionError) {
+    if (sessionError || !session) {
       console.log("Error fetching session", sessionError);
+      return; 
     } 
+    
+    if(!session.user || !session.user.id) {
+      console.log("User or user ID not available in session");
+      return; 
+    }
 
-    const {data, error: profileError} = await supabase.from('profiles').select().eq("id", session.user.id)
+    const {data, error: profileError} = await supabase.from('profiles').select().eq("id", session?.user?.id)
 
     if (profileError) {
       console.log("Error fetching profile", profileError);
+      return;
     } 
 
   return <Avatar profile={data[0]}/>

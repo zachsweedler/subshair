@@ -11,6 +11,9 @@ export const dynamic = 'force-dynamic'
 export default async function RootLayout({ children }) {
   return (
     <html>
+      <head>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+      </head>
       <body className={poppins.className}>
         <StyledComponentsRegistry>
           <ThemeWrapper>
