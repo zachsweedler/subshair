@@ -56,7 +56,6 @@ export default function FilterNav() {
   // handle search box menu item selection
   const handleRetrieve = useCallback(
     async (res) => {
-      console.log(res);
       const feature = res.features[0];
       dispatch(
         updateFilter({

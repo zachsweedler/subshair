@@ -1,4 +1,4 @@
-import PropertyGrid from "@/components/portal/properties-page/PropertyGrid";
+import PropertyGridServer from "@/components/portal/properties-page/PropertyGridServer";
 import React from "react";
 
 export const metadata = {
@@ -9,7 +9,7 @@ export default function Properties() {
 
   return (
     <>
-      <PropertyGrid />
+      <PropertyGridServer />
     </>
   );
 }

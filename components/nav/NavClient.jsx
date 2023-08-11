@@ -48,7 +48,9 @@ function NavClient({ children, session }) {
                 />
               </LogoFlex>
             </Link>
-            {!session ? (
+            {pathname.startsWith('/sign-up') || pathname.startsWith('/sign-in') ?
+            null : 
+            !session ? (
               <SignUpFlex>
                 <Link href="/sign-in">Sign In</Link>
                 <Link href="/sign-up">
@@ -58,7 +60,7 @@ function NavClient({ children, session }) {
             ) : (
               // avatar server component is passed in here via children prop of this client component
               children
-            )}
+            )} 
           </NavFlex>
         </>
       )}

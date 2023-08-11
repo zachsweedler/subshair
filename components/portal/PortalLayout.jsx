@@ -28,7 +28,8 @@ function PortalLayout({ children, user }) {
       <MainWrapper>
         <MenuWrapper>
           <Link href="/">
-            <Image
+            <Image 
+              onClick={(e)=> e.stopPropagation()}
               alt=""
               src="/assets/images/brand/subshair-icon-black.svg"
               width={30}

@@ -53,7 +53,7 @@ function SignUpForm() {
           setError(false);
           setLoading(false);
           setSuccess(true);
-          router.push("/portal/tenant/explore");
+          router.push("/explore");
         }
       })
       .catch((error) => {

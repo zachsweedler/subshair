@@ -89,8 +89,9 @@ function HeroSearch() {
         feature?.properties?.name +
           `, ${feature?.properties?.context?.region?.name}`
       );
+      router.push('/explore')
     },
-    [dispatch]
+    [dispatch, router]
   );
   
 

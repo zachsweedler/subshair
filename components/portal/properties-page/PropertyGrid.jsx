@@ -10,54 +10,54 @@ import { Para } from "@/styles/StyledTypography";
 import PropertyCard from "@/components/property-cards/PropertyCard";
 import PageNav from "../page-nav/PageNav";
 import Link from "next/link";
+import { LottiePlayer } from "lottie-react";
+import loadingAnimation from "../../../public/loading.json";
 
-function PropertyGrid() {
+function PropertyGrid({data, count}) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [cardIndex, setCardIndex] = useState();
-  const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState()
+  const [properties, setProperties] = useState(data);
+  const [propertyCount, setPropertyCount] = useState(count)
 
   // load-more pagination states
   const [batch, setBatch] = useState(1);
   const [limit] = useState(8);
-  const [totalProperties, setTotalProperties] = useState(0);
 
-  // fetch user's properties
-  useEffect(() => {
-    const fetchProperties = async () => {
+  // fetch more user's properties
+    const fetchMoreProperties = async () => {
+      setBatch(batch + 1)
       setLoading(true)
       const {
         data: { session },
       } = await supabaseClient.auth.getSession();
       const {
-        data: fetchedData,
-        error: fetchError,
+        data,
+        error,
         count,
       } = await supabaseClient
         .from("properties")
-        .select("*", { count: "exact" })
+        .select("*", { count: 'exact' })
         .eq("created_by", session?.user?.id)
         .range(batch * limit - limit, batch * limit - 1)
         .order("created_at", { ascending: false });
-      if (fetchError) {
+      if (error) {
         setLoading(false)
-        console.log("Error fetching properties:", fetchError);
+        console.log("Error fetching properties:", error);
       } else {
-        setTotalProperties(count);
         setLoading(false)
         if (batch === 1) {
-          setProperties(fetchedData);
+          setProperties(data);
         } else {
+          setPropertyCount(count)
           setProperties((prevProperties) => [
             ...prevProperties,
-            ...fetchedData,
+            ...data,
           ]);
         }
       }
     };
-    fetchProperties();
-  }, [batch, limit, totalProperties]);
 
   // onClick of the edit / finish draft property button
   const onEditClick = (event, index) => {
@@ -114,7 +114,6 @@ function PropertyGrid() {
           setProperties((prevProperties) =>
             prevProperties.filter((property) => property.id !== item.id)
           );
-          setTotalProperties((prevCount) => prevCount - 1);
         }
         break;
       case "List":
@@ -189,10 +188,10 @@ function PropertyGrid() {
                 })}
               </Grid>
               <Pagination>
-                {properties.length === totalProperties ? (
+                {properties.length === propertyCount ? (
                   <Para grey>No more properties to show</Para>
                 ) : (
-                  <Button hoverAnimate onClick={() => setBatch(batch + 1)}>Load More</Button>
+                  <Button hoverAnimate onClick={() => fetchMoreProperties()}>Load More</Button>
                 )}
               </Pagination>
             </Wrapper>
@@ -207,7 +206,9 @@ function PropertyGrid() {
           )}
         </>
       ) : (
-        <Para>Loading...</Para>
+        <LoadingWrapper>
+            <LottiePlayer animationData={loadingAnimation} loop={true} />
+        </LoadingWrapper>
       )}
     </>
   );
@@ -223,6 +224,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   row-gap: 50px;
 `;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -244,4 +246,20 @@ const Pagination = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
+`;
+
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  width: 50px;
+  height: 40px;
+  padding: 9px 12px 5px 12px;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50px;
+  border-radius: 5px;
 `;
