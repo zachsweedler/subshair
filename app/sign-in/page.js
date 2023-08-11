@@ -7,7 +7,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Sign In",
+  title: "Sign In | SubShair",
 };
 
 async function SignIn() {

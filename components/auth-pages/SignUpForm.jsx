@@ -53,7 +53,6 @@ function SignUpForm() {
           setError(false);
           setLoading(false);
           setSuccess(true);
-          router.push("/explore");
         }
       })
       .catch((error) => {
@@ -79,45 +78,53 @@ function SignUpForm() {
         <Flex direction="column">
           <H3>Create an Account</H3>
         </Flex>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Flex direction="column" rowGap="20px">
-            <Flex direction="column" rowGap="4px">
-              <label>Email</label>
-              <input
-                placeholder="Email"
-                type="text"
-                label="Email"
-                name="email"
-                autoComplete="on"
-                {...register("email")}
-              />
-              {errors.email && (
-                <Para red small>
-                  {errors.email.message}
-                </Para>
-              )}
-            </Flex>
-            <Flex direction="column" rowGap="4px">
-              <label>Password</label>
-              <input
-                placeholder="Password"
-                type="password"
-                name="password"
-                autoComplete="on"
-                label="Password"
-                {...register("password")}
-              />
-              {errors.email && (
-                <Para red small>
-                  {errors.email.message}
-                </Para>
-              )}
-            </Flex>
-            <Button hoverAnimate onClick={handleSubmit(onSubmit)}>
-              {loading ? "Creating Account..." : "Create Account"}
-            </Button>
+        {success ? (
+          <Flex>
+            <Para>
+              Please check your email's inbox to confirm your address.
+            </Para>
           </Flex>
-        </form>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Flex direction="column" rowGap="20px">
+              <Flex direction="column" rowGap="4px">
+                <label>Email</label>
+                <input
+                  placeholder="Email"
+                  type="text"
+                  label="Email"
+                  name="email"
+                  autoComplete="on"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <Para red small>
+                    {errors.email.message}
+                  </Para>
+                )}
+              </Flex>
+              <Flex direction="column" rowGap="4px">
+                <label>Password</label>
+                <input
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                  autoComplete="on"
+                  label="Password"
+                  {...register("password")}
+                />
+                {errors.email && (
+                  <Para red small>
+                    {errors.email.message}
+                  </Para>
+                )}
+              </Flex>
+              <Button hoverAnimate onClick={handleSubmit(onSubmit)}>
+                {loading ? "Creating Account..." : "Create Account"}
+              </Button>
+            </Flex>
+          </form>
+        )}
         <Flex direction="row" columnGap="5px" align="center">
           <Para grey small>
             Already have an account
@@ -129,7 +136,7 @@ function SignUpForm() {
           </Link>
         </Flex>
       </Flex>
-      {success && <Notification success text="Account created successfully" />}
+      {success && <Notification success text="Please confirm your email." />}
       {error && <Notification error text={error} />}
     </div>
   );
