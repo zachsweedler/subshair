@@ -81,7 +81,7 @@ function SignUpForm() {
         {success ? (
           <Flex>
             <Para>
-              Please check your email's inbox to confirm your address.
+              Please check your email&apos;s inbox to confirm your address.
             </Para>
           </Flex>
         ) : (
