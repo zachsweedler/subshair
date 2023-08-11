@@ -14,6 +14,7 @@ import FilterNav from "./filters/filter-nav/FilterNav";
 import NoResults from "./no-results/NoResults";
 import { WebMercatorViewport } from "viewport-mercator-project";
 import { updateFilter } from "@/slices/filterSlice";
+import { useRouter } from "next/navigation";
 
 function PropertyMap() {
   const [properties, setProperties] = useState([]);
@@ -37,6 +38,7 @@ function PropertyMap() {
   const dispatch = useDispatch();
   const [mapWidth, setMapWidth] = useState();
   const [mapHeight, setMapHeight] = useState();
+  const router = useRouter()
 
   const getBoundingBox = useCallback((width, height) => {
     const viewport = new WebMercatorViewport({
@@ -156,7 +158,7 @@ function PropertyMap() {
   // function to navigate to the property detail page.
   const handlePopupClick = (selected) => {
     const url = `/explore/property/${selected.id}`;
-    window.open(url, "_blank").focus();
+    router.push(url)
   };
 
   return (
