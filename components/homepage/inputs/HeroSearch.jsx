@@ -7,10 +7,10 @@ import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components";
 
 function HeroSearch() {
-  const router = useRouter();
   const theme = useTheme();
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
+  const router = useRouter()
 
   const autoFillTheme = {
     variables: {
@@ -52,8 +52,10 @@ function HeroSearch() {
     `,
   };
 
+  // handle search box menu item selection
   const handleRetrieve = useCallback(
     async (res) => {
+      console.log('res', res)
       const feature = res.features[0];
       const bbox = feature.properties?.bbox
       dispatch(
@@ -92,6 +94,12 @@ function HeroSearch() {
           value: bbox,
         })
       );
+      dispatch(
+        updateFilter({
+          filterName: "searchFeatureType",
+          value: feature?.properties?.feature_type,
+        })
+      );
       setInputValue(
         feature?.properties?.name +
           `, ${feature?.properties?.context?.region?.name}`
@@ -100,7 +108,6 @@ function HeroSearch() {
     },
     [dispatch, router]
   );
-  
 
   return (
     <InputWrapper>
@@ -110,7 +117,6 @@ function HeroSearch() {
           theme={autoFillTheme}
           onRetrieve={handleRetrieve}
           value={inputValue}
-          proximity='ip'
           options={{
             language: 'en',
             types: "city,address,neighborhood",
