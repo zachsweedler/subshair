@@ -15,49 +15,57 @@ function RoomCounter({ formik, type, name }) {
   }, [formik.values, name]);
 
   const handleClick = (increment) => {
-    const updatedValue = localValue + (type === "bed" ? increment : increment / 2);
+    const updatedValue =
+      localValue + (type === "bed" ? increment : increment / 2);
     setLocalValue(updatedValue);
     formik.setFieldValue(name, updatedValue);
-    const propertyType = type === "bed" ? "property_bedrooms" : "property_bathrooms";
+    const propertyType =
+      type === "bed" ? "property_bedrooms" : "property_bathrooms";
     dispatch(updateProperty({ [propertyType]: updatedValue }));
   };
 
   return (
     <Wrapper>
-    <input
-      style={{ display: "none" }}
-      name={name}
-      placeholder="123 Main Street"
-      value={formik?.values[name]}
-      type="text"
-    />
-    <Button
-      onClick={() => handleClick(1)}
-      disabled={type === "bed" ? formik?.values[name] === 20 : formik?.values[name] === 15}
-    >
-      <Image
-        src="/assets/images/icons/plus-icon-black.svg"
-        alt=""
-        width={20}
-        height={20}
-        style={{
-          userSelect: "none"
-        }}
+      <input
+        style={{ display: "none" }}
+        name={name}
+        value={formik?.values[name]}
+        type="text"
       />
-    </Button>
-    <H5 style={{userSelect: "none"}}>{formik.values[name]}</H5>
-    <Button onClick={() => handleClick(-1)} disabled={formik.values[name] === 1}>
-      <Image
-        src="/assets/images/icons/minus-icon-black.svg"
-        alt=""
-        width={20}
-        height={20}
-        style={{
-          userSelect: "none"
-        }}
-      />
-    </Button>
-  </Wrapper>
+      <Button
+        onClick={() => handleClick(1)}
+        disabled={
+          type === "bed"
+            ? formik?.values[name] === 20
+            : formik?.values[name] === 15
+        }
+      >
+        <Image
+          src="/assets/images/icons/plus-icon-black.svg"
+          alt=""
+          width={20}
+          height={20}
+          style={{
+            userSelect: "none",
+          }}
+        />
+      </Button>
+      <H5 style={{ userSelect: "none" }}>{formik.values[name]}</H5>
+      <Button
+        onClick={() => handleClick(-1)}
+        disabled={formik.values[name] === 1}
+      >
+        <Image
+          src="/assets/images/icons/minus-icon-black.svg"
+          alt=""
+          width={20}
+          height={20}
+          style={{
+            userSelect: "none",
+          }}
+        />
+      </Button>
+    </Wrapper>
   );
 }
 

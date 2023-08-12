@@ -33,7 +33,7 @@ function PropertyCard({
 }) {
   return (
     <CardWrapper explore={explore} onClick={type === "manage" ? null : onClick} style={style}>
-      <ImageSliderCard onClick={(e) => e.stopPropagation()} images={images} />
+      <ImageSliderCard images={images} onArrowsClick={(e) => e.stopPropagation()} />
       <Content>
         {type === "manage" ? <StatusLabel status={status} /> : null}
         <AddressRow>

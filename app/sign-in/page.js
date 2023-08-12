@@ -25,12 +25,12 @@ async function SignIn() {
       <GridItem>
         <SignInForm />
       </GridItem>
-        <Testimonial
-          src="/assets/images/marketing/sign-in-image2.png"
-          header="''SubShair lets me capitalize on Airbnb while hedging the vacancy risk.''"
-          name="Rose S."
-          jobTitle="Landlord"
-        />
+      <Testimonial
+        src="/assets/images/marketing/sign-in-image2.png"
+        header="''SubShair lets me capitalize on Airbnb while hedging the vacancy risk.''"
+        name="Rose S."
+        jobTitle="Landlord"
+      />
     </Grid>
   );
 }

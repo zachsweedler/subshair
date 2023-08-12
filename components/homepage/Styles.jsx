@@ -9,6 +9,9 @@ export const Section = styled.div`
   z-index: 250;
   padding: 70px 30px;
   overflow: hidden;
+  @media screen and (max-width: 1000px) {
+    padding: 45px 30px;
+  }
 `;
 
 export const Container = styled.div`

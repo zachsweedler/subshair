@@ -56,7 +56,9 @@ export default function FilterNav() {
   // handle search box menu item selection
   const handleRetrieve = useCallback(
     async (res) => {
+      console.log('res', res)
       const feature = res.features[0];
+      const bbox = feature.properties?.bbox
       dispatch(
         updateFilter({
           filterName: "searchLatitude",
@@ -87,6 +89,18 @@ export default function FilterNav() {
           value: 13,
         })
       );
+      dispatch(
+        updateFilter({
+          filterName: "searchBbox",
+          value: bbox,
+        })
+      );
+      dispatch(
+        updateFilter({
+          filterName: "searchFeatureType",
+          value: feature?.properties?.feature_type,
+        })
+      );
       setInputValue(
         feature?.properties?.name +
           `, ${feature?.properties?.context?.region?.name}`
@@ -109,8 +123,9 @@ export default function FilterNav() {
           onRetrieve={handleRetrieve}
           value={inputValue}
           options={{
-            types: "city, address, neighborhood",
-            language: "en",
+            language: 'en',
+            types: "city,address,neighborhood",
+            country: 'US',
           }}
         />
         <FilterMenuItem onClick={handleFilterPopup}>

@@ -24,9 +24,9 @@ export const Button = styled.button `
     font-size: ${({ theme, small }) => ( small ? theme.fontSizes.psm : theme.fontSizes.p)};
     position: relative;
     height: 40px;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.320, 1);
     :hover {
        cursor: pointer !important;
-       transform: ${({ hoverAnimate }) => ( hoverAnimate ? 'scale(0.98)' : 'none')};
+       transform: ${({ hoverAnimate }) => ( hoverAnimate ? 'scale(0.95)' : 'none')};
     }
 `

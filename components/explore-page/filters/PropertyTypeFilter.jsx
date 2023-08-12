@@ -6,33 +6,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { H4 } from '@/styles/StyledTypography';
 import { InputWrapper } from '@/components/portal/property-form/Styles';
 
-export default function FurnishingFilter() {
+export default function PropertyTypeFilter() {
 
   const dispatch = useDispatch();
-  const filterState = useSelector((state) => state.filter.furnishing)
+  const filterState = useSelector((state) => state.filter.propertyType)
   
   const handleChange = (event) => {
-    dispatch(updateFilter({filterName: 'furnishing', value: event?.target?.value === "true" ? true : false}))
+    dispatch(updateFilter({filterName: 'propertyType', value: event?.target?.value}))
   };
 
   return (
     <Wrapper onClick={(e) => e.stopPropagation()}>
     <div style={{ display: "flex", flexDirection: "column", rowGap: "5px" }}>
-      <H4>Furnishing</H4>
+      <H4>Property Type</H4>
     </div>
     <InputWrapper>
       <select
-        name="property_furnishing"
+        name="property_type"
         onChange={async (e) => {
           handleChange(e)
         }}
         value={filterState}
       >
         <option value={null} disabled selected>
-          Select Furnishing
+          Select Property Type
         </option>
-        <option value="true">Furnished</option>
-        <option value="false">Not Furnished</option>
+        <option value="Apartment">Apartment</option>
+        <option value="Condo">Condo</option>
+        <option value="Single Family">Single Family</option>
+        <option value="Multi Family">Multi Family</option>
+        <option value="Townhouse">Townhouse</option>
       </select>
     </InputWrapper>
   </Wrapper>

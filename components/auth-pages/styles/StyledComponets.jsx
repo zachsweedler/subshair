@@ -7,7 +7,7 @@ export const Grid = styled.div`
   height: 100vh;
   @media screen and (max-width: 1000px) {
     grid-template-columns: 1fr;
-    grid-template-rows: 1.5fr 1fr;
+    grid-template-rows: 1fr;
   }
 `;
 

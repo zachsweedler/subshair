@@ -71,7 +71,7 @@ const FixedWrapper = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  max-width: ${({ theme }) => theme.container.width.lg};
+  max-width: ${({ theme }) => theme.container.width.md};
   padding: ${({ theme }) => theme.container.padding.nav};
   margin: auto;
   display: flex;

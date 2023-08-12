@@ -9,7 +9,7 @@ import { supabaseClient } from "@/utils/supabase";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-function Avatar({ withInfo, withEdit, bigBool, profile }) {
+function Avatar({ withInfo, withEdit, bigBool, profile, userEmail}) {
   const avatarInputRef = useRef();
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
@@ -17,6 +17,10 @@ function Avatar({ withInfo, withEdit, bigBool, profile }) {
   const id = profile?.id;
   const pathname = usePathname();
 
+  useEffect(()=>{
+    console.log('user email', userEmail)
+  },[userEmail])
+  
   const handleEditClick = () => avatarInputRef.current.click();
 
   const handleVersionUpsert = async (timestamp, userId) => {
@@ -62,7 +66,7 @@ function Avatar({ withInfo, withEdit, bigBool, profile }) {
   const computedHref = !pathname.startsWith("/portal") && "/portal/landlord/properties"
 
   return (
-    <Flex direction="column" gap="14px">
+    <Flex direction="column" gap="14px" align="center">
       <>
         <Wrapper>
             {computedHref && (
@@ -99,9 +103,9 @@ function Avatar({ withInfo, withEdit, bigBool, profile }) {
         {withInfo && (
           <Flex direction="column" align="center" padding="12px 0px">
             <H4>
-              {profile?.first_name} {profile?.last_name}
+              {profile?.first_name} {profile?.last_name} 
             </H4>
-            <Para grey>{profile?.email}</Para>
+            <Para grey>{userEmail}</Para>
           </Flex>
         )}
       </>
@@ -125,6 +129,8 @@ const imageProps = {
 
 const Wrapper = styled.div`
   position: relative;
+  width: fit-content;
+  height: fit-content;
 `;
 
 const AvatarWrapper = styled.div`
@@ -132,6 +138,7 @@ const AvatarWrapper = styled.div`
   height: ${({ big }) => (big ? "160px" : "25px")};
   border-radius: 100%;
   overflow: hidden;
+  padding: 0;
 `;
 
 const EditButton = styled.div`

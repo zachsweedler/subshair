@@ -1,6 +1,6 @@
 "use client";
-import { H5, Para } from "@/styles/StyledTypography";
-import React from "react";
+import { Para } from "@/styles/StyledTypography";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,11 +9,23 @@ import Avatar from "../avatar/Avatar";
 import { useDispatch } from "react-redux";
 import { clearForm } from "@/slices/uploadSlice";
 import { Divider } from "../common/Divider";
+import { Flex } from "../common/Flexboxes";
 
 function PortalLayout({ children, user }) {
   const pathname = usePathname();
   const params = useParams();
   const dispatch = useDispatch();
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 900);
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 900);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
+
 
   const isMenuItemSelected = (menuItemPath) => {
     return pathname === menuItemPath;
@@ -25,9 +37,10 @@ function PortalLayout({ children, user }) {
 
   return (
     <>
+      { isDesktop ? 
       <MainWrapper>
         <MenuWrapper>
-          <Link href="/">
+          <Link href="/" style={{padding: "0px 15px"}}>
             <Image 
               onClick={(e)=> e.stopPropagation()}
               alt=""
@@ -89,6 +102,11 @@ function PortalLayout({ children, user }) {
           </PageContent>
         </PageWrapper>
       </MainWrapper>
+      :
+      <Flex width="100vw" height="100vh" align="center" justify="center">
+        <Para>Your screen is too small. Please use a desktop or tablet.</Para>
+      </Flex>
+      }
     </>
   );
 }
@@ -102,6 +120,9 @@ const MainWrapper = styled.div`
   width: 100vw;
   height: auto;
   background-color: ${({ theme }) => theme?.colors?.nuetral?.lightBgGrey};
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const MenuWrapper = styled.div`
@@ -111,7 +132,7 @@ const MenuWrapper = styled.div`
   align-self: stretch;
   row-gap: 90px;
   width: 100%;
-  padding: 40px;
+  padding: 30px;
   max-width: 272px;
   background-color: ${({ theme }) => theme?.colors?.white};
   height: 100vh;

@@ -14,15 +14,15 @@ export const metadata = {
 export default async function Account() {
 
   const supabase = createServerComponentClient({ cookies })
-  const {data: {session}} = await supabase.auth.getSession();
-  const {data: user} = await supabase.from('profiles').select().eq("id", session.user.id)
+  const {data: {user}} = await supabase.auth.getUser();
+  const {data: profile} = await supabase.from('profiles').select().eq("id", user.id)
 
   return (
     <>
       <PageNav title="Account" top/>
           <Flex direction='column' rowGap='60px' width="100%" align='center'>
-              <Avatar withInfo withEdit bigBool={true} profile={user[0]}/>
-              <AccountInfoForm user={user[0]}/>
+              <Avatar withInfo withEdit bigBool={true} profile={profile[0]} userEmail={user.email}/>
+              <AccountInfoForm profile={profile[0]} userEmail={user.email}/>
           </Flex>
     </>
   )

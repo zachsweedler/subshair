@@ -48,9 +48,8 @@ function NavClient({ children, session }) {
                 />
               </LogoFlex>
             </Link>
-            {pathname.startsWith('/sign-up') || pathname.startsWith('/sign-in') ?
-            null : 
-            !session ? (
+            {pathname.startsWith("/sign-up") ||
+            pathname.startsWith("/sign-in") ? null : !session ? (
               <SignUpFlex>
                 <Link href="/sign-in">Sign In</Link>
                 <Link href="/sign-up">
@@ -60,7 +59,7 @@ function NavClient({ children, session }) {
             ) : (
               // avatar server component is passed in here via children prop of this client component
               children
-            )} 
+            )}
           </NavFlex>
         </>
       )}
@@ -113,9 +112,11 @@ const NavFlex = styled.div`
   align-items: center;
   padding: ${({ theme }) => theme.container.padding.nav};
   max-width: ${({ theme, pathname }) =>
-    pathname === "/explore" ||
-    pathname === "/sign-in" ||
-    pathname === "/sign-up"
+    pathname.startsWith("/explore/property")
+      ? theme.container.width.md
+      : pathname === "/explore" ||
+        pathname === "/sign-in" ||
+        pathname === "/sign-up"
       ? theme.container.width.nav
       : theme.container.width.lg};
   margin: 0 auto;

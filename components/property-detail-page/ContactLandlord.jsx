@@ -1,10 +1,9 @@
 "use client";
 import { H4, Para } from "@/styles/StyledTypography";
-import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
-import { Button } from "../common/Button";
 import SignInForm from "../auth-pages/SignInForm";
+import ButtonMailTo from "../common/ButtonMailTo";
 
 export default function ContactLandlord({
   email,
@@ -13,6 +12,7 @@ export default function ContactLandlord({
   onClose,
   session,
 }) {
+
   const mailTo = `mailTo: ${email}`;
 
   return (
@@ -21,7 +21,7 @@ export default function ContactLandlord({
         {!session ? (
          <>
             <CopyWrapper>
-                <SignInForm/>
+                <SignInForm overlay onClick={onClose}/>
             </CopyWrapper>
         </> 
         ) : (
@@ -32,11 +32,10 @@ export default function ContactLandlord({
                 Listed by {firstName} {lastName}
               </Para>
             </CopyWrapper>
-            <Link href={mailTo}>
-              <Button hoverAnimate style={{ width: "100%" }}>
-                Email {firstName}
-              </Button>
-            </Link>
+            <ButtonMailTo
+                mailto={mailTo}
+                label="Hi! I'm interested in renting this property."
+            />
          </>
        )}
       </Wrapper>
@@ -47,14 +46,13 @@ export default function ContactLandlord({
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 50px;
   row-gap: 30px;
   border-radius: ${({ theme }) => theme.borderRadius.base};
   background-color: ${({ theme }) => theme.colors.white};
   width: 100%;
   overflow: hidden;
   max-width: 500px;
-  margin: 0px 30px;
+  padding: 50px;
 `;
 
 const CopyWrapper = styled.div`

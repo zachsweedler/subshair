@@ -15,6 +15,7 @@ import NoResults from "./no-results/NoResults";
 import { WebMercatorViewport } from "viewport-mercator-project";
 import { updateFilter } from "@/slices/filterSlice";
 import { useRouter } from "next/navigation";
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 function PropertyMap() {
   const [properties, setProperties] = useState([]);
@@ -26,32 +27,54 @@ function PropertyMap() {
   // filter redux states
   const searchLatitude = useSelector((state) => state.filter.searchLatitude);
   const searchLongitude = useSelector((state) => state.filter.searchLongitude);
-  const searchZoom = useSelector((state) => state.filter.searchZoom)
+  const searchZoom = useSelector((state) => state.filter.searchZoom);
+  const searchBbox = useSelector((state) => state.filter.searchBbox);
+  const searchFeatureType = useSelector((state) => state.filter.searchFeatureType);
   const rentMax = useSelector((state) => state.filter.rentMax);
   const rentMin = useSelector((state) => state.filter.rentMin);
   const revShareMax = useSelector((state) => state.filter.revShareMax);
   const revShareMin = useSelector((state) => state.filter.revShareMin);
   const furnishing = useSelector((state) => state.filter.furnishing);
+  const propertyType = useSelector((state) => state.filter.propertyType);
   const beds = useSelector((state) => state.filter.bedrooms);
   const baths = useSelector((state) => state.filter.bathrooms);
   const amenities = useSelector((state) => state.filter.amenities);
   const dispatch = useDispatch();
   const [mapWidth, setMapWidth] = useState();
   const [mapHeight, setMapHeight] = useState();
-  const router = useRouter()
+  const [visible, setVisible] = useState(false);
+  const router = useRouter();
+  const mapRef = useRef(null);
 
-  const getBoundingBox = useCallback((width, height) => {
-    const viewport = new WebMercatorViewport({
-      width,
-      height,
-      longitude: searchLongitude,
-      latitude: searchLatitude,
-      zoom: searchZoom
-    });
-    const nw = viewport.unproject([0, 0]);
-    const se = viewport.unproject([viewport.width, viewport.height]);
-    return { nw, se };
-  },[searchLongitude, searchLatitude, searchZoom]);
+  // fit bounds of region on searchbox select.
+  useEffect(() => {
+    if (mapRef.current) {
+      const map = mapRef.current.getMap(); // 
+      if (searchFeatureType === "address" || searchFeatureType === "street") {
+        map.flyTo({ center: [searchLongitude, searchLatitude], zoom: 16 });
+      } else {
+        map.fitBounds(searchBbox);
+      }
+    }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchFeatureType, searchBbox]);
+
+  // fed into the "properties_in_view" rpc function.
+  const getBoundingBox = useCallback(
+    (width, height) => {
+      const viewport = new WebMercatorViewport({
+        width,
+        height,
+        longitude: searchLongitude,
+        latitude: searchLatitude,
+        zoom: searchZoom,
+      });
+      const nw = viewport.unproject([0, 0]);
+      const se = viewport.unproject([viewport.width, viewport.height]);
+      return { nw, se };
+    },
+    [searchLongitude, searchLatitude, searchZoom]
+  );
 
   // If screen size changes, update the sizeRef value with latest screen dimensions.
   const updateSize = useCallback(() => {
@@ -60,12 +83,12 @@ function PropertyMap() {
         setMapWidth(sizeRef.current.offsetWidth);
         setMapHeight(sizeRef.current.offsetHeight);
       }
-    }, 500);  // 200 milliseconds delay
+    }, 500); // 200 milliseconds delay
   }, [sizeRef]);
 
   // trigger updateSize function on window events.
   useEffect(() => {
-    updateSize()
+    updateSize();
     window.addEventListener("resize", updateSize);
     // Clean up on component unmount
     return () => {
@@ -79,8 +102,9 @@ function PropertyMap() {
       ...prevView,
       longitude: searchLongitude || -98.5795,
       latitude: searchLatitude || 39.8283,
-      zoom: searchZoom || 4.125
+      zoom: searchZoom || 4.125,
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchLongitude, searchLatitude]);
 
   // onMove function to allow user to zoom/pan around.
@@ -93,11 +117,59 @@ function PropertyMap() {
     const { latitude, longitude, zoom } = viewState;
     dispatch(updateFilter({ filterName: "searchLatitude", value: latitude }));
     dispatch(updateFilter({ filterName: "searchLongitude", value: longitude }));
-    dispatch(updateFilter({ filterName: "searchZoom", value: zoom }))
+    dispatch(updateFilter({ filterName: "searchZoom", value: zoom }));
   };
 
   // useEffect for fetching properties, re-runs everytime a filter is modified.
   useEffect(() => {
+    const isStatusListed = (prop) => prop.property_status === "Listed";
+    const isRentWithinRange = (prop) => {
+      if (rentMax === 10000) {
+        return prop.property_rent >= rentMin;
+      }
+      return prop.property_rent >= rentMin && prop.property_rent <= rentMax;
+    };
+    const isRevShareWithinRange = (prop) => {
+      return (
+        prop.property_rev_share >= revShareMin &&
+        prop.property_rev_share <= revShareMax
+      );
+    };
+    const isBedroomCountValid = (prop) => {
+      return beds === "*" || prop.property_bedrooms >= beds;
+    };
+    const isBathroomCountValid = (prop) => {
+      return baths === "*" || prop.property_bathrooms >= baths;
+    };
+    const isFurnishingValid = (prop) => {
+      return furnishing === null || prop.property_furnishing === furnishing;
+    };
+    const isPropertyTypeValid = (prop) => {
+      return propertyType === null || prop.property_type === propertyType;
+    };
+
+    const areAmenitiesValid = (prop) => {
+      return (
+        amenities.length === 0 ||
+        amenities.every((amenity) => prop.property_amenities.includes(amenity))
+      );
+    };
+
+    const filterProperties = (propsInView) => {
+      return propsInView.filter((prop) => {
+        return (
+          isStatusListed(prop) &&
+          isRentWithinRange(prop) &&
+          isRevShareWithinRange(prop) &&
+          isBedroomCountValid(prop) &&
+          isBathroomCountValid(prop) &&
+          isFurnishingValid(prop) &&
+          isPropertyTypeValid(prop) &&
+          areAmenitiesValid(prop)
+        );
+      });
+    };
+
     const fetchProperties = async () => {
       try {
         setLoading(true);
@@ -112,24 +184,7 @@ function PropertyMap() {
               max_long: se[0],
             }
           );
-          // Filter properties based on conditions
-          const filteredProps = propsInView.filter((prop) => {
-            return (
-              prop.property_status === "Listed" &&
-              prop.property_rent >= rentMin &&
-              prop.property_rent <= rentMax &&
-              prop.property_rev_share >= revShareMin &&
-              prop.property_rev_share <= revShareMax &&
-              (beds === "*" || prop.property_bedrooms === beds) &&
-              (baths === "*" || prop.property_bathrooms === baths) &&
-              (furnishing === null ||
-                prop.property_furnishing === furnishing) &&
-              (amenities.length === 0 ||
-                amenities.every((amenity) =>
-                  prop.property_amenities.includes(amenity)
-                ))
-            );
-          });
+          const filteredProps = filterProperties(propsInView);
           setProperties(filteredProps);
           setLoading(false);
         }
@@ -139,90 +194,91 @@ function PropertyMap() {
     };
     fetchProperties();
   }, [
-    searchLongitude,
-    searchLatitude,
-    searchZoom,
+    mapHeight,
+    mapWidth,
+    getBoundingBox,
+    rentMax,
+    rentMin,
+    revShareMin,
+    revShareMax,
     beds,
     baths,
     furnishing,
-    rentMin,
+    propertyType,
     amenities,
-    rentMax,
-    revShareMin,
-    revShareMax,
-    mapHeight,
-    mapWidth,
-    getBoundingBox
   ]);
 
   // function to navigate to the property detail page.
   const handlePopupClick = (selected) => {
     const url = `/explore/property/${selected.id}`;
-    router.push(url)
+    router.push(url);
   };
 
   return (
     <>
-    <Wrapper ref={sizeRef}>
-      <FilterNav />
-      <Map
-        {...view}
-        onMove={onMapMove}
-        onMoveEnd={onMapMoveEnd}
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
-        style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/subshair/cl811pk9h004w14pfyw49lodp"
-      >
-        {loading && (
-          <LoadingWrapper>
-            <Lottie animationData={loadingAnimation} loop={true} />
-          </LoadingWrapper>
-        )}
-        {properties && properties.length > 0 ? (
-          properties.map((item, index) => (
-            <div key={index}>
-              <Marker
-                longitude={item.property_longitude}
-                latitude={item.property_latitude}
-                anchor="center"
-              >
-                <ExploreMarker
-                  number={item.property_rent}
-                  onClick={() => setSelected(item)}
-                />
-              </Marker>
-            </div>
-          ))
-        ) : (
-          <NoResults />
-        )}
-        {selected && !loading && (
-          <Popup
-            longitude={selected.property_longitude}
-            latitude={selected.property_latitude}
-            offset={15}
-            maxWidth="270px"
-            style={{ padding: "0px !important" }}
-            onClose={() => {
-              setSelected(null);
-            }}
-          >
-            <PropertyCard
-              explore
-              rent={selected.property_rent}
-              revShare={selected.property_rev_share}
-              images={selected.property_images}
-              address={selected.property_address}
-              status={selected.property_status}
-              city={selected.property_city}
-              state={selected.property_state}
-              onClick={() => handlePopupClick(selected)}
-            />
-          </Popup>
-        )}
-        <NavigationControl position="top-left" />
-      </Map>
-    </Wrapper>
+      <Wrapper ref={sizeRef}>
+        <FilterNav />
+        <Map
+          {...view}
+          onMove={onMapMove}
+          onMoveEnd={onMapMoveEnd}
+          onRender={()=>setVisible(true)}
+          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
+          style={{ width: "100%", height: "100%" }}
+          mapStyle="mapbox://styles/subshair/cl811pk9h004w14pfyw49lodp"
+          boxZoom={true}
+          ref={mapRef}
+        >
+          {loading && (
+            <LoadingWrapper>
+              <Lottie animationData={loadingAnimation} loop={true} />
+            </LoadingWrapper>
+          )}
+          {properties && properties.length > 0 ? (
+            properties.map((item, index) => (
+              <div key={index}>
+                <Marker
+                  longitude={item.property_longitude}
+                  latitude={item.property_latitude}
+                  anchor="center"
+                >
+                  <ExploreMarker
+                    number={item.property_rent}
+                    onClick={() => setSelected(item)}
+                  />
+                </Marker>
+              </div>
+            ))
+          ) : (
+            <NoResults />
+          )}
+          {selected && !loading && (
+            <Popup
+              longitude={selected.property_longitude}
+              latitude={selected.property_latitude}
+              offset={15}
+              maxWidth="270px"
+              style={{ padding: "0px !important" }}
+              onClose={() => {
+                setSelected(null);
+              }}
+            >
+              <PropertyCard
+                explore
+                rent={selected.property_rent}
+                revShare={selected.property_rev_share}
+                images={selected.property_images}
+                address={selected.property_address}
+                status={selected.property_status}
+                city={selected.property_city}
+                state={selected.property_state}
+                onClick={() => handlePopupClick(selected)}
+              />
+            </Popup>
+          )}
+          <NavigationControl position="top-left" />
+        </Map>
+      </Wrapper>
     </>
   );
 }

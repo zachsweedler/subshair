@@ -11,7 +11,7 @@ function ImagesGrid({ images, onClick }) {
       <ImageGrid>
         {images?.map((item) => (
           <div key={item} style={{ overflow: "hidden" }}>
-            <ImageWrapper>
+            <ImageWrapper onClick={onClick}>
               <Image
                 alt="property-image"
                 src={item}
@@ -43,7 +43,7 @@ const ImageGrid = styled.div`
   grid-template-rows: 1fr;
   grid-column-gap: 5px;
   margin-bottom: 40px;
-  height: 600px;
+  height: 512px;
   width: 100%;
   border-radius: 10px;
   position: relative;

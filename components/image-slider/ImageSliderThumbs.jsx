@@ -3,14 +3,14 @@ import React, { useCallback, useState } from "react";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
-import 'swiper/css';
-import 'swiper/css/free-mode';
-import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
 import styled from "styled-components";
+import { ImageSliderButton } from "./ImageSliderButton";
 
 function ImageSliderThumbs({ images }) {
-  
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const handleSwiperClick = useCallback((event) => {
@@ -21,11 +21,12 @@ function ImageSliderThumbs({ images }) {
     <Wrapper onClick={handleSwiperClick}>
       <Swiper
         modules={[FreeMode, Navigation, Thumbs]}
-        thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+        thumbs={{
+          swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
+        }}
         spaceBetween={10}
         slidesPerView={1}
-        navigation={true}
-        style={{height: '600px', width: '100%', borderRadius: "5px"}}
+        style={{ height: "60vh", width: "100%", borderRadius: "5px" }}
       >
         {images?.map((item) => (
           <SwiperSlide
@@ -41,20 +42,29 @@ function ImageSliderThumbs({ images }) {
             />
           </SwiperSlide>
         ))}
+        <ImageSliderButton direction="next" />
+        <ImageSliderButton direction="prev" />
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
         spaceBetween={20}
-        slidesPerView={4}
+        slidesPerView={5}
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
-        style={{ width: "100%", height: "150px" }}
+        style={{ width: "100%", height: "10vh" }}
+        className="mySwiper"
       >
         {images?.map((item) => (
           <SwiperSlide
             key={item}
-            style={{ width: "100%", position: "relative", borderRadius: "5px", overflow: "hidden" }}
+            style={{
+              width: "100%",
+              position: "relative",
+              borderRadius: "5px",
+              overflow: "hidden",
+              cursor: "pointer"
+            }}
           >
             <Image
               alt="selected-property-images"
@@ -73,12 +83,12 @@ function ImageSliderThumbs({ images }) {
 export default ImageSliderThumbs;
 
 const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    row-gap: 20px;
-    width: 100%;
-    max-width: ${({theme})=> theme.container.width.lg};
-    height: auto;
-    overflow: hidden;
-    z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: 100%;
+  max-width: ${({ theme }) => theme.container.width.lg};
+  height: auto;
+  overflow: hidden;
+  z-index: 1000;
 `;

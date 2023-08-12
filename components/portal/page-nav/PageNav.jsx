@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   right: 0;
   z-index: 500;
   width: calc(100% - 272px);
-  height: 70px;
+  height: fit-content;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

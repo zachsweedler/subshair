@@ -7,7 +7,7 @@ export default function RoomSelector({ type }) {
   const dispatch = useDispatch();
   const bedCountRedux = useSelector((state) => state.filter.bedrooms);
   const bathCountRedux = useSelector((state) => state.filter.bathrooms);
-  const options = ["*", "1", "2", "3", "4", "5", "6", "7", "8"];
+  const options = ["*", 1, 2, 3, 4, 5, 6, 7, 8];
 
   const handleSelect = (option) => {
     dispatch(updateFilter({ filterName: type === "bed" ? "bedrooms" : "bathrooms", value: option }));
@@ -19,7 +19,7 @@ export default function RoomSelector({ type }) {
         <Option key={option} onClick={() => handleSelect(option)} selected={type === "bed" ? (bedCountRedux === option ? true : null) : (bathCountRedux === option ? true : null)}>
           {type === "bed" ? 
             <Para white={bedCountRedux === option ? true : null}>
-                {option === 8 ? "8+" : option === "*" ? "Any" : option}
+                 {option === "*" ? "Any" : option + "+"}
             </Para> 
             : 
             <Para white={bathCountRedux === option ? true : null}>

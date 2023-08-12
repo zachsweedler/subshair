@@ -73,8 +73,8 @@ function SignUpForm() {
   };
 
   return (
-    <div>
-      <Flex direction="column" rowGap="40px" width="400px">
+    <>
+      <Flex direction="column" rowGap="40px" width="100%" maxWidth="400px">
         <Flex direction="column">
           <H3>Create an Account</H3>
         </Flex>
@@ -138,7 +138,7 @@ function SignUpForm() {
       </Flex>
       {success && <Notification success text="Please confirm your email." />}
       {error && <Notification error text={error} />}
-    </div>
+    </>
   );
 }
 

@@ -12,7 +12,7 @@ import Description from "./page-sections/Description";
 import { Divider } from "../common/Divider";
 import Footer from "../homepage/Footer";
 
-export default function DetailPage({propData, landlordData, session}) {
+export default function DetailPage({ propData, landlordData, session }) {
   const property = propData;
 
   // const [monthlyGross, setMonthlyGross] = useState(2420);
@@ -27,8 +27,10 @@ export default function DetailPage({propData, landlordData, session}) {
 
   // for Image Slider Overlay
   const [sliderOpen, setSliderOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  const showSlider = () => {
+  const showSlider = (index) => {
+    setSelectedImageIndex(index);
     setSliderOpen(!sliderOpen);
   };
 
@@ -41,47 +43,48 @@ export default function DetailPage({propData, landlordData, session}) {
       />
       {/* <ProfitCalculator open={calcOpen} onClick={showCalc} /> */}
       <ContentGrid>
-          <ImagesGrid onClick={showSlider} images={property.property_images} />
-          <InfoKey
-            rent={property.property_rent}
-            revShare={property.property_rev_share}
-            address={property.property_address}
-            unitNumber={property.property_unit_number}
-            city={property.property_city}
-            state={property.property_state}
-            landlordData={landlordData}
-            session={session}
-          />
-          {/* <Divider/>
+          <ImagesGrid
+            onClick={(index) => showSlider(index)}
+            images={property.property_images}
+        />
+        <InfoKey
+          rent={property.property_rent}
+          revShare={property.property_rev_share}
+          address={property.property_address}
+          unitNumber={property.property_unit_number}
+          city={property.property_city}
+          state={property.property_state}
+          landlordData={landlordData}
+          session={session}
+        />
+        {/* <Divider/>
           <Estimates
             monthlyRev={`$${monthlyGross}`}
             monthlyCashflow={`$${monthlyNet}`}
             monthlyMargin={`${yearlyNet}%`}
           /> */}
-          <Divider/>
-          <InfoGrid
-            bedrooms={property.property_bedrooms}
-            bathrooms={property.property_bathrooms}
-            type={property.property_type}
-            furnished={property.property_furnished}
-            squareFtg={property.property_square_footage}
-            lotSize={property.property_lot_size}
-            yearBuilt={property.property_year_built}
-            market={property.property_city}
-            furnishing={property.property_furnishing}
-          />
-          <Divider/>
-          <Location
-            longitude={property?.property_longitude}
-            latitude={property?.property_latitude}
-          />
-          <Divider/>
-          <AmenitiesGrid amenities={property.property_amenities} />
-          <Divider/>
-          <Description description={property.property_description} />
-          <Footer
-            detailPage
-          />
+        <Divider />
+        <InfoGrid
+          bedrooms={property.property_bedrooms}
+          bathrooms={property.property_bathrooms}
+          type={property.property_type}
+          furnished={property.property_furnished}
+          squareFtg={property.property_square_footage}
+          lotSize={property.property_lot_size}
+          yearBuilt={property.property_year_built}
+          market={property.property_city}
+          furnishing={property.property_furnishing}
+        />
+        <Divider />
+        <Location
+          longitude={property?.property_longitude}
+          latitude={property?.property_latitude}
+        />
+        <Divider />
+        <AmenitiesGrid amenities={property.property_amenities} />
+        <Divider />
+        <Description description={property.property_description} />
+        <Footer detailPage />
       </ContentGrid>
     </Wrapper>
   );
@@ -90,12 +93,12 @@ export default function DetailPage({propData, landlordData, session}) {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: ${({theme}) => theme.container.width.lg};
-  padding: ${({theme}) => theme.container.padding.pdpcontent};
+  max-width: ${({ theme }) => theme.container.width.md};
+  padding: ${({ theme }) => theme.container.padding.pdpcontent};
   width: 100%;
   align-items: center;
   margin: auto;
-`
+`;
 
 const ContentGrid = styled.div`
   display: flex;
@@ -111,4 +114,3 @@ const ContentGrid = styled.div`
     padding: 0px;
   }
 `;
-

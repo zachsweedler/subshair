@@ -13,6 +13,7 @@ export default async function RootLayout({ children }) {
     <html>
       <head>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
       </head>
       <body className={poppins.className}>
         <StyledComponentsRegistry>

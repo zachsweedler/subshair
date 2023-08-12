@@ -9,7 +9,7 @@ function Testimonial({header, name, jobTitle, src}) {
 
   return (
     <>
-      <Flex position="relative" width="100%" height="100%">
+      <Wrapper>
         <Image
           src={src}
           alt=""
@@ -24,13 +24,22 @@ function Testimonial({header, name, jobTitle, src}) {
                 <Para white style={{opacity: "70%"}}>{jobTitle}</Para>
             </Flex>
         </CopyWrapper>
-      </Flex>
+      </Wrapper>
     </>
   );
 }
 
 export default Testimonial;
 
+
+const Wrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
+`
 
 const CopyWrapper = styled.div`
     position: absolute;

@@ -19,6 +19,7 @@ import Year from "./Year";
 import { supabaseClient } from "@/utils/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageNav from "../page-nav/PageNav";
+import FormikErrorFocus from "formik-error-focus";
 
 function PropertyForm() {
   const [user, setUser] = useState();
@@ -68,7 +69,7 @@ function PropertyForm() {
     property_lot_size: yup
       .number()
       .typeError("Invalid number format")
-      .required("This is a required field"),
+      .nullable(),
     property_year_built: yup
       .number()
       .typeError("Invalid number format")
@@ -193,6 +194,13 @@ function PropertyForm() {
               </Button>
             </PageNav>
           </Wrapper>
+          <FormikErrorFocus
+            offset={0}
+            align={"middle"}
+            focusDelay={200}
+            ease={"linear"}
+            duration={150}
+          />
         </form>
       </FormikProvider>
     </>

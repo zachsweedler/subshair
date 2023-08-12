@@ -22,6 +22,8 @@ export default async function PropertyGridServer() {
   if (fetchError) {
     setLoading(false);
     console.log("Error fetching properties:", fetchError);
+  } else {
+    console.log("fetched user props", fetchedData)
   }
 
   return <PropertyGrid data={fetchedData} count={count} />;

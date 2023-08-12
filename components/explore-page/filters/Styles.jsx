@@ -85,17 +85,5 @@ export const RangeWrapper = styled.div`
 
 // Multi-Select Filter (Amenities)
 
-
-
-// Boolean Filter (Furnishing)
-export const CheckboxWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-`
-
-
 // Counter Filter (Beds, Baths)
 

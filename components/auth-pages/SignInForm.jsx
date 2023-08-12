@@ -11,7 +11,7 @@ import { Button } from "../common/Button";
 import * as yup from 'yup'
 import { yupResolver } from "@hookform/resolvers/yup";
 
-function SignInForm() {
+function SignInForm({overlay, onClick}) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -45,14 +45,18 @@ function SignInForm() {
     } else {
       setLoading(false);
       setSuccess(true);
-      router.push("/");
+      if (overlay) {
+        onClick
+      } else {
+        router.push("/")
+      }
       router.refresh();
     }
   };
 
   return (
     <>
-      <Flex direction="column" rowGap="40px" width="400px">
+      <Flex direction="column" rowGap="40px" width={overlay ? "100%" : "400px"}>
         <Flex direction="column">
           <H3>Welcome Back</H3>
         </Flex>

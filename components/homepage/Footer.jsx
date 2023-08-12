@@ -32,38 +32,33 @@ export default function Footer({detailPage}) {
           </Para>
         </Links>
         <Social>
-          <Link href="/">
+          <a target="_blank" href="/">
             <Image
-              alt=""
-              src="/assets/images/icons/tiktok-icon-black.svg"
-              width={20}
-              height={20}
-            />
-          </Link>
-          <Link href="/">
-            <Image
+              onClick={(e)=> e.stopPropagation}
               alt=""
               src="/assets/images/icons/twitter-icon-black.svg"
               width={20}
               height={20}
             />
-          </Link>
-          <Link href="/">
+          </a>
+          <a target="_blank" href="/">
             <Image
+              onClick={(e)=> e.stopPropagation}
               alt=""
               src="/assets/images/icons/ig-icon-black.svg"
               width={20}
               height={20}
             />
-          </Link>
-          <Link href="/">
+          </a>
+          <a target="_blank" href="https://www.linkedin.com/company/subshair/">
             <Image
+              onClick={(e)=> e.stopPropagation}
               alt=""
               src="/assets/images/icons/linkedin-icon-black.svg"
               width={20}
               height={20}
             />
-          </Link>
+          </a>
         </Social>
       </Container>
     </Wrapper>

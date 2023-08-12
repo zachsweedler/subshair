@@ -10,6 +10,7 @@ import { H5, Para } from "@/styles/StyledTypography"
 import { useDispatch } from "react-redux"
 import { clearFilters } from "@/slices/filterSlice"
 import { Button } from "@/components/common/Button"
+import PropertyTypeFilter from "../PropertyTypeFilter"
 
 export default function FilterPopup ({searchCount, handleFilterSearch}) {
 
@@ -27,6 +28,8 @@ export default function FilterPopup ({searchCount, handleFilterSearch}) {
                     <RevShareFilter/>
                     <Divider/>
                     <RoomsFilter/>
+                    <Divider/>
+                    <PropertyTypeFilter/>
                     <Divider/>
                     <FurnishingFilter/>
                     <Divider/>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Map, Marker, NavigationControl } from "react-map-gl";
 import styled from "styled-components";
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 function Location({ longitude, latitude }) {
 
@@ -12,6 +13,8 @@ function Location({ longitude, latitude }) {
     latitude: latitude,
     zoom: 15,
   });
+
+  const size = 50
 
   useEffect(() => {
     setView((prevView) => ({
@@ -37,9 +40,9 @@ function Location({ longitude, latitude }) {
             <Image
               src="assets/images/icons/map-marker-black.svg"
               alt=""
-              width={50}
-              height={50}
-              style={{ zIndex: "1000" }}
+              width={size}
+              height={size}
+              style={{ zIndex: "1000"}}
             />
           </Marker>
           <NavigationControl showCompass={false} position="top-left" />

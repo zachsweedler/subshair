@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { clearForm, updateProperty } from "@/slices/uploadSlice";
 import { supabaseClient } from "@/utils/supabase";
-import { Para } from "@/styles/StyledTypography";
+import { H2, H3, H4, Para } from "@/styles/StyledTypography";
 import PropertyCard from "@/components/property-cards/PropertyCard";
 import PageNav from "../page-nav/PageNav";
 import Link from "next/link";
 import { LottiePlayer } from "lottie-react";
 import loadingAnimation from "../../../public/loading.json";
+import Image from "next/image";
+import { Flex } from "@/components/common/Flexboxes";
 
 function PropertyGrid({data, count}) {
   const router = useRouter();
@@ -196,13 +198,24 @@ function PropertyGrid({data, count}) {
               </Pagination>
             </Wrapper>
           ) : (
-            <>
-              <Para>
-                Are you a landlord and are interested in SubShairing your
-                property?
-              </Para>
-              <Button hoverAnimate>Creating Listing +</Button>
-            </>
+            <EmptyWrapper>
+              <Flex direction="column" rowGap="5px">
+              <H3>No Properties Added Yet</H3>
+              <Para grey>Interested listing your property on SubShair?</Para>
+              </Flex>
+              <Link href="/portal/landlord/upload">
+                <Button hoverAnimate>Create Listing +</Button>
+              </Link>
+              <ImageWrapper>
+                <Image
+                  src="/assets/images/marketing/properties-empty-image.png"
+                  alt=""
+                  fill={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </ImageWrapper>
+            </EmptyWrapper>
           )}
         </>
       ) : (
@@ -262,4 +275,35 @@ const LoadingWrapper = styled.div`
   transform: translate(-50%, -50%);
   top: 50px;
   border-radius: 5px;
+`;
+
+const EmptyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  width: 100%;
+  height: 500px;
+  padding: 100px;
+  align-items: start;
+  justify-content: center;
+  position: relative;
+  background-color: ${({ theme }) => theme.colors.nuetral.bgGrey};
+  border-radius: 12px;
+  overflow: hidden;
+  @media screen and (max-width: 1000px) {
+    padding: 30px;
+    justify-content: start;
+  }
+`;
+
+const ImageWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 390px;
+  height: 76%;
+  @media screen and (max-width: 1200px) {
+    height: 250px;
+    width: 250px;
+  }
 `;

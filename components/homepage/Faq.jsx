@@ -1,5 +1,5 @@
 "use client";
-import { H1, H5 } from "@/styles/StyledTypography";
+import { H1, H2, H5 } from "@/styles/StyledTypography";
 import React from "react";
 import styled from "styled-components";
 import Accordion from "@/components/accordian/Accordian";
@@ -31,7 +31,7 @@ function Faq() {
   return (
     <Grid>
       <StickyWrapper>
-        <H1>Your questions, answered:</H1>
+        <H2>Your questions, <br/>answered:</H2>
       </StickyWrapper>
       <Accordion qas={qas} />
     </Grid>

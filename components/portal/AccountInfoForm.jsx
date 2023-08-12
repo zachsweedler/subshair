@@ -11,7 +11,7 @@ import { Flex } from "../common/Flexboxes";
 import { Divider } from "../common/Divider";
 import { useRouter } from "next/navigation";
 
-function AccountInfoForm({ user }) {
+function AccountInfoForm({ profile, userEmail }) {
   const router = useRouter();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -23,23 +23,35 @@ function AccountInfoForm({ user }) {
 
   const formik = useFormik({
     initialValues: {
-      first_name: user.first_name,
-      last_name: user.last_name,
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      email: userEmail
     },
     validationSchema: validationSchema,
     onSubmit: async () => {
       setLoading(true);
       setError(null);
       setSuccess(null);
-      const { data, error } = await supabaseClient
+      const { error } = await supabaseClient
         .from("profiles")
         .update({
           first_name: formik.values.first_name,
           last_name: formik.values.last_name,
         })
-        .eq("id", user.id);
+        .eq("id", profile.id);
       if (error) {
         console.log("error updating profile", error);
+        setError(error);
+        setLoading(false);
+      }
+
+      const { error: updateEmailError } = await supabaseClient
+        .auth
+        .updateUser({
+          email: formik.values.email
+      })
+      if (updateEmailError) {
+        console.log('error updating user email', updateEmailError)
         setError(error);
         setLoading(false);
       } else {
@@ -70,12 +82,14 @@ function AccountInfoForm({ user }) {
               <InputWrapper>
                 <label>Email</label>
                 <input
-                  disabled
                   name="email"
                   placeholder="email"
                   type="text"
-                  value={user.email}
-                  style={{ opacity: "50%", pointerEvents: "none" }}
+                  value={formik.values.email}
+                  onChange={(e) => {
+                    formik.setFieldTouched("email");
+                    formik.handleChange(e);
+                  }}
                 />
                 {formik.touched.email && formik.errors.email ? (
                   <Para red small>
@@ -129,8 +143,9 @@ function AccountInfoForm({ user }) {
                 hoverAnimate
                 type="submit"
                 disabled={
-                  formik.values.first_name === user.first_name &&
-                  formik.values.last_name === user.last_name
+                  formik.values.first_name === profile.first_name &&
+                  formik.values.last_name === profile.last_name &&
+                  formik.values.email === userEmail
                 }
               >
                 {loading ? "Saving..." : "Save Changes"}
@@ -143,7 +158,7 @@ function AccountInfoForm({ user }) {
           <H4>Billing</H4>
           <Plan>
             <H5>Plan</H5>
-            {user.is_subscribed ? (
+            {profile.is_subscribed ? (
               <Para>SubShair Plus</Para>
             ) : (
               <Flex direction="row" columnGap="5px">
@@ -154,7 +169,7 @@ function AccountInfoForm({ user }) {
           </Plan>
           <PaymentMethod>
             <H5>Payment Method</H5>
-            {user.is_subscribed ? (
+            {profile.is_subscribed ? (
               <Para>Method 1234</Para>
             ) : (
               <Para>Coming Soon</Para>

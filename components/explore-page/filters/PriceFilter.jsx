@@ -72,7 +72,7 @@ function PriceFilter() {
           <Para>―</Para>
           <ValueWrapper>
             <Para small grey>Max</Para>
-            <Para style={{ pointerEvents: "none" }}>{`$${rentMax}`}</Para>
+            <Para style={{ pointerEvents: "none" }}>{`$${rentMax === 10000 ? rentMax + '+' : rentMax}`}</Para>
           </ValueWrapper>
         </RangeWrapper>
       </MenuItem>

@@ -17,7 +17,9 @@ const filterSlice = createSlice({
     furnishing: null,
     searchLongitude: null,
     searchLatitude: null,
-    searchZoom: null
+    searchZoom: null,
+    searchBbox: null,
+    searchFeatureType: null
   },
   reducers: {
     updateFilter: (state, action) => {

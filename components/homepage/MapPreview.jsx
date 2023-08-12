@@ -121,8 +121,8 @@ function MapPreview() {
               state={selected.state}
               style={{
                 width: "300px",
-                right: "-14px",
-                top: "-250px",
+                right: "-5px",
+                top: "-240px",
               }}
             />
           </MemoMarker>

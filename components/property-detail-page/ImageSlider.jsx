@@ -1,8 +1,7 @@
 "use client";
-import React, { useCallback } from "react";
+import React from "react";
 import "swiper/swiper.min.css";
 import "swiper/css/navigation";
-import "../image-slider/MySwiper.scss";
 import styled from "styled-components";
 import ImageSliderThumbs from "../image-slider/ImageSliderThumbs";
 

@@ -55,6 +55,7 @@ function HeroSearch() {
   const handleRetrieve = useCallback(
     async (res) => {
       const feature = res.features[0];
+      const bbox = feature.properties?.bbox
       dispatch(
         updateFilter({
           filterName: "searchLatitude",
@@ -85,6 +86,12 @@ function HeroSearch() {
           value: 13,
         })
       );
+      dispatch(
+        updateFilter({
+          filterName: "searchBbox",
+          value: bbox,
+        })
+      );
       setInputValue(
         feature?.properties?.name +
           `, ${feature?.properties?.context?.region?.name}`
@@ -105,9 +112,9 @@ function HeroSearch() {
           value={inputValue}
           proximity='ip'
           options={{
-            types: "region, city, street, address, neighborhood",
-            language: "en",
-            proximity: 'ip'
+            language: 'en',
+            types: "city,address,neighborhood",
+            country: 'US',
           }}
         />
       <Adornment>

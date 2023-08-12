@@ -13,8 +13,7 @@ function Hero() {
             for Rental Arbitrage
           </H1>
           <H4 thin>
-            Finding properties to rent & <br /> Airbnb for profit has never been
-            easier.
+            Easily find properties to rent & <br /> host on Airbnb for profit.
           </H4>
           <HeroSearch />
         </Content>
@@ -37,7 +36,7 @@ const Content = styled.div`
     justify-content: center;
     align-items: start;
     text-align: left;
-    padding: 150px 30px 100px 30px;
+    padding: 170px 30px 100px 30px;
   }
 `;
 
