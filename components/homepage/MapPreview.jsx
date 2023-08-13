@@ -65,6 +65,8 @@ function MapPreview() {
       state: "MA",
       images: ['/assets/images/marketing/hero-cape-cod.jpg'],
       unit: "",
+      beds: 1,
+      baths: 1.5
     },
     {
       longitude: -70.723082,
@@ -119,6 +121,8 @@ function MapPreview() {
               status={selected.status}
               city={selected.city}
               state={selected.state}
+              beds={selected.beds}
+              baths={selected.baths}
               style={{
                 width: "300px",
                 right: "-5px",

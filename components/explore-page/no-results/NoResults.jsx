@@ -64,7 +64,7 @@ const Wrapper = styled.div`
   background-color: white;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 25%;
   width: 100%;
   max-width: 450px;
   transform: translate(-50%, -50%);
@@ -72,6 +72,9 @@ const Wrapper = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.base};
   z-index: 50;
   row-gap: 30px;
+  @media screen and (max-width: 1000px) {
+    max-width: calc(100% - 80px);
+  }
 `;
 
 const TextWrapper = styled.div`
@@ -80,7 +83,7 @@ const TextWrapper = styled.div`
   align-items: center;
   text-align: center;
   justify-content: center;
-  padding: 20px;
+  row-gap: 12px;
 `;
 
 const JoinWrapper = styled.div`
@@ -91,6 +94,12 @@ const JoinWrapper = styled.div`
   padding: 20px 30px;
   background-color: ${({ theme }) => theme.colors.nuetral.bgGrey};
   border-radius: ${({ theme }) => theme.borderRadius.base};
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+    padding: 20px;
+  }
 `;
 
 const JoinCopyWrapper = styled.div`
@@ -99,4 +108,8 @@ const JoinCopyWrapper = styled.div`
   row-gap: 0px;
   align-items: start;
   text-align: start;
+  @media screen and (max-width: 1000px) {
+    text-align: center;
+    align-items: center;
+  }
 `

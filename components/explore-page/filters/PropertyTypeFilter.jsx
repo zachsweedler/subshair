@@ -3,7 +3,7 @@ import React from 'react'
 import { Wrapper } from './Styles'
 import { updateFilter } from '@/slices/filterSlice';
 import { useDispatch, useSelector } from "react-redux";
-import { H4, H5 } from '@/styles/StyledTypography';
+import { H4, H5, Para } from '@/styles/StyledTypography';
 import { InputWrapper } from '@/components/portal/property-form/Styles';
 
 export default function PropertyTypeFilter() {
@@ -27,7 +27,7 @@ export default function PropertyTypeFilter() {
           value={filterState}
       >
         <option value="" disabled>
-            Select Property Type
+            <Para>Select Property Type</Para>
         </option>
         <option value="Apartment">Apartment</option>
         <option value="Condo">Condo</option>

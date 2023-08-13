@@ -3,7 +3,7 @@ import { Wrapper } from './Styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { amenities } from '@/utils/amenities';
 import { AmenitiesGrid, Amenity } from '../../portal/property-form/Styles';
-import { H5 } from '@/styles/StyledTypography';
+import { H5, Para } from '@/styles/StyledTypography';
 import { updateFilter } from '@/slices/filterSlice';
 
 function AmenitiesFilter() {
@@ -30,7 +30,7 @@ function AmenitiesFilter() {
       <AmenitiesGrid>
         {amenities.map((amenity)=>(
           <Amenity key={amenity} onClick={() => handleAmenityClick(amenity)} selected={filterRedux?.includes(amenity)}>
-            {amenity}
+            <Para>{amenity}</Para>
           </Amenity>
         ))}
       </AmenitiesGrid>

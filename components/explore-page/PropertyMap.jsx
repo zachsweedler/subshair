@@ -311,7 +311,7 @@ function PropertyMap() {
               />
             </Popup>
           )}
-          <NavigationControl position="top-left" />
+          <NavigationControl position="bottom-right" />
         </Map>
       </Wrapper>
     </>
@@ -329,6 +329,10 @@ const Wrapper = styled.div`
   overflow: hidden;
   margin-top: 80px;
   border-top: ${({ theme }) => theme.border.base};
+  @media screen and (max-width: 1000px) {
+    margin-top: 0px;
+    height: 100vh;
+  }
 `;
 
 const LoadingWrapper = styled.div`
