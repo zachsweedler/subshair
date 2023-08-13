@@ -10,11 +10,11 @@ const filterSlice = createSlice({
     rentMax: 10000,
     revShareMin: 0,
     revShareMax: 100,
-    propertyType: null,
+    propertyType: '',
     bedrooms: "*",
     bathrooms: "*",
     amenities: [],
-    furnishing: null,
+    furnishing: '',
     searchLongitude: null,
     searchLatitude: null,
     searchZoom: null,
@@ -33,11 +33,11 @@ const filterSlice = createSlice({
       state.rentMax = 10000,
       state.revShareMin = 0,
       state.revShareMax = 100,
-      state.propertyType = null,
+      state.propertyType = '',
       state.bedrooms = "*",
       state.bathrooms = "*",
       state.amenities = [],
-      state.furnishing = null
+      state.furnishing = ''
     }
   }
 });

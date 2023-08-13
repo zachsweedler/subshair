@@ -2,7 +2,7 @@
 import { Para } from "@/styles/StyledTypography";
 import { SearchBox } from "@mapbox/search-js-react";
 import React, { useCallback, useState } from "react";
-import { useTheme } from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { useDispatch } from "react-redux";
 import { updateFilter } from "@/slices/filterSlice";
 import { FilterMenuItem, FilterWrapper } from "../Styles";
@@ -29,7 +29,7 @@ export default function FilterNav() {
       borderRadius: theme?.borderRadius?.base,
       border: theme?.border?.base,
       boxShadow: "none",
-      minWidth: "100px",
+      maxWidth: "100px"
     },
     icons: {
       search: `
@@ -43,6 +43,7 @@ export default function FilterNav() {
         .Input {
           padding: 0px 30px;
           height: 38.5px;
+          width: 100%;
         }
         .Input:focus {
           border: none !important;
@@ -53,58 +54,90 @@ export default function FilterNav() {
     `,
   };
 
+
   // handle search box menu item selection
   const handleRetrieve = useCallback(
     async (res) => {
-      console.log('res', res)
+      if (!res || !res.features || !res.features[0]) {
+        console.error("Invalid response object:", res);
+        return;
+      }
+      console.log("res", res);
       const feature = res.features[0];
-      const bbox = feature.properties?.bbox
-      dispatch(
-        updateFilter({
-          filterName: "searchLatitude",
-          value: feature.geometry.coordinates[1],
-        })
-      );
-      dispatch(
-        updateFilter({
-          filterName: "searchLongitude",
-          value: feature.geometry.coordinates[0],
-        })
-      );
-      dispatch(
-        updateFilter({
-          filterName: "city",
-          value: feature?.properties?.name,
-        })
-      );
-      dispatch(
-        updateFilter({
-          filterName: "state",
-          value: feature?.properties?.context?.region?.region_code,
-        })
-      );
+      const bbox = feature?.properties?.bbox;
+      const latitude = feature?.geometry?.coordinates[1];
+      const longitude = feature?.geometry.coordinates[0];
+      const city = feature?.properties?.name;
+      const state = feature?.properties?.context?.region?.region_code;
+      const searchFeatureType = feature?.properties?.feature_type;
+      const inputValue =
+        feature?.properties?.name +
+        `, ${feature?.properties?.context?.region?.name}`;
+
+      if (latitude !== undefined) {
+        dispatch(
+          updateFilter({
+            filterName: "searchLatitude",
+            value: feature.geometry.coordinates[1],
+          })
+        );
+      }
+      if (longitude !== undefined) {
+        dispatch(
+          updateFilter({
+            filterName: "searchLongitude",
+            value: feature.geometry.coordinates[0],
+          })
+        );
+      }
+      if (city !== undefined) {
+        dispatch(
+          updateFilter({
+            filterName: "city",
+            value: feature?.properties?.name,
+          })
+        );
+      }
+      if (state !== undefined) {
+        dispatch(
+          updateFilter({
+            filterName: "state",
+            value: feature?.properties?.context?.region?.region_code,
+          })
+        );
+      }
+      if (searchFeatureType !== undefined) {
+        dispatch(
+          updateFilter({
+            filterName: "searchFeatureType",
+            value: feature?.properties?.feature_type,
+          })
+        );
+      }
+
       dispatch(
         updateFilter({
           filterName: "searchZoom",
           value: 13,
         })
       );
-      dispatch(
-        updateFilter({
-          filterName: "searchBbox",
-          value: bbox,
-        })
-      );
-      dispatch(
-        updateFilter({
-          filterName: "searchFeatureType",
-          value: feature?.properties?.feature_type,
-        })
-      );
-      setInputValue(
-        feature?.properties?.name +
-          `, ${feature?.properties?.context?.region?.name}`
-      );
+
+      if (inputValue !== undefined) {
+        setInputValue(
+          feature?.properties?.name +
+            `, ${feature?.properties?.context?.region?.name}`
+        );
+      }
+
+      if (bbox !== undefined) {
+        dispatch(
+          updateFilter({
+            filterName: "searchBbox",
+            value: bbox,
+          })
+        );
+      }
+      
     },
     [dispatch]
   );
@@ -116,18 +149,20 @@ export default function FilterNav() {
   return (
     <>
       <FilterWrapper>
-        <SearchBox
-          placeholder="City or address..."
-          accessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
-          theme={autoFillTheme}
-          onRetrieve={handleRetrieve}
-          value={inputValue}
-          options={{
-            language: 'en',
-            types: "city,address,neighborhood",
-            country: 'US',
-          }}
-        />
+        <InputWrapper>
+          <SearchBox
+            placeholder="City or address..."
+            accessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
+            theme={autoFillTheme}
+            onRetrieve={handleRetrieve}
+            value={inputValue}
+            options={{
+              language: 'en',
+              types: "city,address,neighborhood",
+              country: 'US',
+            }}
+          />
+        </InputWrapper>
         <FilterMenuItem onClick={handleFilterPopup}>
           <Para style={{ cursor: "pointer" }}>Filters</Para>
           {showFilterPopup ? <FilterPopup /> : null}
@@ -136,3 +171,11 @@ export default function FilterNav() {
     </>
   );
 }
+
+
+const InputWrapper = styled.div`
+  position: relative;
+  height: auto;
+  width: 100%;
+  max-width: 300px;
+`

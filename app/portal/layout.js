@@ -13,12 +13,9 @@ export default async function ManageLayout({children}) {
   if (!session) {
       redirect('/sign-in')
   }
-
-  const {data: user} = await supabase.from('profiles').select().eq("id", session.user.id)
-
   return (
     <>
-      <PortalLayout title="Title" user={user[0]}>
+      <PortalLayout title="Title">
         {children}
       </PortalLayout>
     </>

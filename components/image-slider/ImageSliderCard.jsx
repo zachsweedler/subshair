@@ -7,7 +7,7 @@ import "swiper/swiper.min.css";
 import "swiper/css/navigation";
 import { ImageSliderButton } from "./ImageSliderButton";
 
-function ImageSliderCard({ images, onClick }) {
+function ImageSliderCard({ images, onClick, explore }) {
   const defaultImage =
     "/assets/images/default-property-image/default-property-image.svg";
   const [showButtons, setShowButtons] = useState(false);
@@ -27,7 +27,7 @@ function ImageSliderCard({ images, onClick }) {
         style={{
           display: "flex",
           width: "100%",
-          height: "250px",
+          height: explore ? '200px' : '250px',
           overflow: "hidden",
           position: "absolute",
           borderRadius: "5px 5px 0px 0px",

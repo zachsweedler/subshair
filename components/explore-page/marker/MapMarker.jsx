@@ -12,7 +12,7 @@ function MapMarker({number, onClick}) {
 
   return (
     <Wrapper onClick={handleClick}>
-        <Para white style={{pointerEvents: "none", fontWeight: "500"}}>${number}</Para>
+        <Para white style={{pointerEvents: "none", fontWeight: "500"}}>${number.toLocaleString()}</Para>
     </Wrapper>
   )
 }

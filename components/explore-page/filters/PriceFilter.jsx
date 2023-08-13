@@ -13,13 +13,13 @@ function rentText(value) {
 }
 
 function PriceFilter() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const theme = useTheme();
   const minDistance = 10;
   const sliderTheme = {
     color: theme.colors.black,
     height: 2,
-    padding: "13px 0",
+    padding: "13px 0px",
     "& .MuiSlider-thumb": {
       height: 18,
       width: 18,
@@ -35,16 +35,26 @@ function PriceFilter() {
   };
 
   // Rent Slider
-  const rentMin = useSelector((state)=> state.filter.rentMin)
-  const rentMax = useSelector((state)=> state.filter.rentMax)
+  const rentMin = useSelector((state) => state.filter.rentMin);
+  const rentMax = useSelector((state) => state.filter.rentMax);
   const handleChange = (e, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
       return;
     }
     if (activeThumb === 0) {
-      dispatch(updateFilter({filterName: 'rentMin', value: Math.min(newValue[0], rentMax - minDistance)}))
+      dispatch(
+        updateFilter({
+          filterName: "rentMin",
+          value: Math.min(newValue[0], rentMax - minDistance),
+        })
+      );
     } else {
-      dispatch(updateFilter({filterName: 'rentMax', value: Math.max(newValue[1], rentMin + minDistance)}))
+      dispatch(
+        updateFilter({
+          filterName: "rentMax",
+          value: Math.max(newValue[1], rentMin + minDistance),
+        })
+      );
     }
   };
 
@@ -66,13 +76,19 @@ function PriceFilter() {
         </Box>
         <RangeWrapper>
           <ValueWrapper>
-            <Para small grey>Min</Para>
-            <Para style={{ pointerEvents: "none" }}>{`$${rentMin}`}</Para>
+            <Para small grey>
+              Min
+            </Para>
+            <Para style={{ pointerEvents: "none" }}>{`$${rentMin.toLocaleString()}`}</Para>
           </ValueWrapper>
           <Para>―</Para>
           <ValueWrapper>
-            <Para small grey>Max</Para>
-            <Para style={{ pointerEvents: "none" }}>{`$${rentMax === 10000 ? rentMax + '+' : rentMax}`}</Para>
+            <Para small grey>
+              Max
+            </Para>
+            <Para style={{ pointerEvents: "none" }}>{`$${
+              rentMax === 10000 ? rentMax.toLocaleString() + "+" : rentMax.toLocaleString()
+            }`}</Para>
           </ValueWrapper>
         </RangeWrapper>
       </MenuItem>

@@ -3,7 +3,7 @@ import React from 'react'
 import { Wrapper } from './Styles'
 import { updateFilter } from '@/slices/filterSlice';
 import { useDispatch, useSelector } from "react-redux";
-import { H4 } from '@/styles/StyledTypography';
+import { H4, H5 } from '@/styles/StyledTypography';
 import { InputWrapper } from '@/components/portal/property-form/Styles';
 
 export default function PropertyTypeFilter() {
@@ -12,24 +12,22 @@ export default function PropertyTypeFilter() {
   const filterState = useSelector((state) => state.filter.propertyType)
   
   const handleChange = (event) => {
-    dispatch(updateFilter({filterName: 'propertyType', value: event?.target?.value}))
+    dispatch(updateFilter({filterName: 'propertyType', value: event?.target?.value}));
   };
 
   return (
     <Wrapper onClick={(e) => e.stopPropagation()}>
     <div style={{ display: "flex", flexDirection: "column", rowGap: "5px" }}>
-      <H4>Property Type</H4>
+      <H5>Property Type</H5>
     </div>
     <InputWrapper>
       <select
-        name="property_type"
-        onChange={async (e) => {
-          handleChange(e)
-        }}
-        value={filterState}
+          name="property_type"
+          onChange={handleChange}
+          value={filterState}
       >
-        <option value={null} disabled selected>
-          Select Property Type
+        <option value="" disabled>
+            Select Property Type
         </option>
         <option value="Apartment">Apartment</option>
         <option value="Condo">Condo</option>

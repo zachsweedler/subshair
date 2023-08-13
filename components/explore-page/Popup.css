@@ -1,9 +1,13 @@
-  .mapboxgl-popup-close-button {
-    display: none;
-  }
-  
-  .mapboxgl-popup-content {
-    padding: 0;
-    width: 290px;
-    border-radius: 6px;
-  }
+.mapboxgl-popup-close-button {
+  display: none;
+}
+
+.mapboxgl-popup-tip {
+  display: none;
+}
+
+.mapboxgl-popup-content {
+  padding: 0 !important;
+  width: 300px;
+  border-radius: 6px;
+}

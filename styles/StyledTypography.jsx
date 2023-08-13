@@ -3,10 +3,11 @@ import styled from 'styled-components'
 
 export const Para = styled.p`
   font-size: ${({ theme, small }) => ( small ? theme.fontSizes.psm : theme.fontSizes.p)};
-  font-weight: ${({ theme, light, thin, medium }) => (
+  font-weight: ${({ theme, light, thin, bold, medium }) => (
     light ? theme.fontWeights.text.psm :
     thin ? theme.fontWeights.text.psm :
-    medium ? theme.fontWeights.text.h1 :
+    medium ? theme.fontWeights.text.h4 :
+    bold ? theme.fontWeights.text.h1 :
     theme.fontWeights.text.p
   )};
   color: ${({ theme, white, grey, red }) => (
@@ -127,9 +128,11 @@ export const H4 = styled.h4`
 
 export const H5 = styled.h5`
   font-size: ${({ theme }) => (theme.fontSizes.h5)};
-  font-weight: ${({ theme, thin }) => (
+  font-weight: ${({ theme, light, thin, bold }) => (
+    light ? theme.fontWeights.text.psm :
     thin ? theme.fontWeights.text.psm :
-    theme.fontWeights.text.h5
+    bold ? theme.fontWeights.text.h1 :
+    theme.fontWeights.text.h4
   )};
   color: ${({ theme, white, grey }) => (
     white ? theme.colors.white :

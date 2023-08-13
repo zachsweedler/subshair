@@ -14,7 +14,7 @@ export const FilterWrapper = styled.div`
   width: 100%;
   height: auto;
   z-index: 900;
-  padding: 20px 30px;
+  padding: ${({theme}) => theme.container.padding.nav};
   max-width: ${({theme}) => theme.container.width.nav};
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 5px 5px 0px 0px;

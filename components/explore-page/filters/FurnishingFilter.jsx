@@ -3,7 +3,7 @@ import React from 'react'
 import { Wrapper } from './Styles'
 import { updateFilter } from '@/slices/filterSlice';
 import { useDispatch, useSelector } from "react-redux";
-import { H4 } from '@/styles/StyledTypography';
+import { H4, H5 } from '@/styles/StyledTypography';
 import { InputWrapper } from '@/components/portal/property-form/Styles';
 
 export default function FurnishingFilter() {
@@ -18,7 +18,7 @@ export default function FurnishingFilter() {
   return (
     <Wrapper onClick={(e) => e.stopPropagation()}>
     <div style={{ display: "flex", flexDirection: "column", rowGap: "5px" }}>
-      <H4>Furnishing</H4>
+      <H5>Furnishing</H5>
     </div>
     <InputWrapper>
       <select
@@ -28,7 +28,7 @@ export default function FurnishingFilter() {
         }}
         value={filterState}
       >
-        <option value={null} disabled selected>
+        <option value="" disabled selected>
           Select Furnishing
         </option>
         <option value="true">Furnished</option>

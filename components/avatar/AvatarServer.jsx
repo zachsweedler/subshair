@@ -8,7 +8,7 @@ export default async function AvatarServer() {
     const supabase = createServerComponentClient({ cookies });
 
     const {data: {user}} = await supabase.auth.getUser();
-    const {data: profile} = await supabase.from('profiles').select().eq("id", user.id)
+    const {data: profile} = await supabase.from('profiles').select().eq("id", user?.id)
 
-  return <Avatar profile={profile[0]} userEmail={user.email}/>
+  return <Avatar profile={profile && profile[0]} userEmail={user?.email}/>
 }

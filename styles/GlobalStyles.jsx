@@ -72,19 +72,10 @@ export const GlobalStyles = createGlobalStyle`
         border: none;
         background-color: black;
         color: white;
-        padding: 10px 15px;
+        padding: 10px 12px;
         border-radius: 5px;
         cursor: pointer;
         font-weight: ${({ theme }) => theme.fontWeights.buttons.base};
-        font-size: ${({ theme }) => theme.fontSizes.p};
-        /* &:hover {
-            transform: scale(1.05);
-            transition: transform 0.5s ease-in;
-        }
-        &:not(:hover) {
-            transform: scale(1);
-            transition: transform 0.2s ease-out;
-        } */
     }
 
     button:disabled {

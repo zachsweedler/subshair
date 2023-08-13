@@ -20,7 +20,7 @@ export function ImageSliderButton({ direction }) {
 
   return (
     <ButtonWrapper onClick={handleClick} direction={direction} className={direction === "next" ? ".swiper-button-next" : ".swiper-button-prev"}>
-      <Image src={buttonImage} alt={direction === "next" ? "Next" : "Previous"} fill={true} style={{objectFit: "contain"}}/>
+      <Image src={buttonImage} alt={direction === "next" ? "Next" : "Previous"} fill={true} style={{objectFit: "contain"}} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
     </ButtonWrapper>
   );
 }

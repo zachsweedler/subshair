@@ -42,7 +42,7 @@ const Wrapper = styled.div`
   border-radius: 20px;
   overflow: hidden;
   @media screen and (max-width: 1000px) {
-    padding: 30px;
+    padding: 40px;
     justify-content: start;
   }
 `;

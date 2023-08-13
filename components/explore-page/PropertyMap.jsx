@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { supabaseClient } from "@/utils/supabase";
 import ExploreMarker from "@/components/explore-page/marker/MapMarker";
 import { useDispatch, useSelector } from "react-redux";
-import _ from "lodash";
+import _, { set } from "lodash";
 import Lottie from "lottie-react";
 import loadingAnimation from "../../public/loading.json";
 import PropertyCard from "../property-cards/PropertyCard";
@@ -15,7 +15,6 @@ import NoResults from "./no-results/NoResults";
 import { WebMercatorViewport } from "viewport-mercator-project";
 import { updateFilter } from "@/slices/filterSlice";
 import { useRouter } from "next/navigation";
-import 'mapbox-gl/dist/mapbox-gl.css'
 
 function PropertyMap() {
   const [properties, setProperties] = useState([]);
@@ -29,7 +28,9 @@ function PropertyMap() {
   const searchLongitude = useSelector((state) => state.filter.searchLongitude);
   const searchZoom = useSelector((state) => state.filter.searchZoom);
   const searchBbox = useSelector((state) => state.filter.searchBbox);
-  const searchFeatureType = useSelector((state) => state.filter.searchFeatureType);
+  const searchFeatureType = useSelector(
+    (state) => state.filter.searchFeatureType
+  );
   const rentMax = useSelector((state) => state.filter.rentMax);
   const rentMin = useSelector((state) => state.filter.rentMin);
   const revShareMax = useSelector((state) => state.filter.revShareMax);
@@ -42,23 +43,56 @@ function PropertyMap() {
   const dispatch = useDispatch();
   const [mapWidth, setMapWidth] = useState();
   const [mapHeight, setMapHeight] = useState();
-  const [visible, setVisible] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState();
   const router = useRouter();
   const mapRef = useRef(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    console.log('properties', properties)
+    isMounted.current = true;
+    return () => (isMounted.current = false);
+  }, [properties]);
 
   // fit bounds of region on searchbox select.
   useEffect(() => {
-    if (mapRef.current) {
-      const map = mapRef.current.getMap(); // 
-      if (searchFeatureType === "address" || searchFeatureType === "street") {
-        map.flyTo({ center: [searchLongitude, searchLatitude], zoom: 16 });
+    const currentMapRef = mapRef.current;
+    if (currentMapRef && isMounted.current) {
+      const map = currentMapRef.getMap();
+      // Check if map is already loaded
+      if (map.loaded()) {
+        if (searchFeatureType === "address" || searchFeatureType === "street") {
+          map.flyTo({ center: [searchLongitude, searchLatitude], zoom: 16 });
+        } else {
+          map.fitBounds(searchBbox);
+        }
+        setMapLoaded(true)
       } else {
-        map.fitBounds(searchBbox);
+        // This ensures the map is fully loaded before trying to manipulate it.
+        map.on("load", () => {
+          if (
+            searchFeatureType === "address" ||
+            searchFeatureType === "street"
+          ) {
+            map.flyTo({ center: [searchLongitude, searchLatitude], zoom: 16 });
+          } else {
+            map.fitBounds(searchBbox);
+          }
+        });
       }
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Cleanup
+    return () => {
+      if (currentMapRef) {
+        const map = currentMapRef.getMap();
+        map.off("load");
+        setMapLoaded(false)
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchFeatureType, searchBbox]);
 
+  
   // fed into the "properties_in_view" rpc function.
   const getBoundingBox = useCallback(
     (width, height) => {
@@ -142,10 +176,10 @@ function PropertyMap() {
       return baths === "*" || prop.property_bathrooms >= baths;
     };
     const isFurnishingValid = (prop) => {
-      return furnishing === null || prop.property_furnishing === furnishing;
+      return furnishing === "" || prop.property_furnishing === furnishing;
     };
     const isPropertyTypeValid = (prop) => {
-      return propertyType === null || prop.property_type === propertyType;
+      return propertyType === "" || prop.property_type === propertyType;
     };
 
     const areAmenitiesValid = (prop) => {
@@ -222,7 +256,6 @@ function PropertyMap() {
           {...view}
           onMove={onMapMove}
           onMoveEnd={onMapMoveEnd}
-          onRender={()=>setVisible(true)}
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
           style={{ width: "100%", height: "100%" }}
           mapStyle="mapbox://styles/subshair/cl811pk9h004w14pfyw49lodp"
@@ -250,18 +283,18 @@ function PropertyMap() {
               </div>
             ))
           ) : (
-            <NoResults />
+             <NoResults />
           )}
           {selected && !loading && (
             <Popup
               longitude={selected.property_longitude}
               latitude={selected.property_latitude}
-              offset={15}
+              offset={25}
               maxWidth="270px"
-              style={{ padding: "0px !important" }}
               onClose={() => {
                 setSelected(null);
               }}
+              style={{ padding: "0px", width: 'auto', alignItems: "center" }}
             >
               <PropertyCard
                 explore
@@ -272,6 +305,8 @@ function PropertyMap() {
                 status={selected.property_status}
                 city={selected.property_city}
                 state={selected.property_state}
+                beds={selected.property_bedrooms}
+                baths={selected.property_bathrooms}
                 onClick={() => handlePopupClick(selected)}
               />
             </Popup>
@@ -290,9 +325,9 @@ const Wrapper = styled.div`
   flex-direction: column;
   row-gap: 0px;
   width: 100%;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 80px);
   overflow: hidden;
-  margin-top: 70px;
+  margin-top: 80px;
   border-top: ${({ theme }) => theme.border.base};
 `;
 

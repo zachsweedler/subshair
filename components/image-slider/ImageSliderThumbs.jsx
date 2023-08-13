@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
@@ -12,6 +12,16 @@ import { ImageSliderButton } from "./ImageSliderButton";
 
 function ImageSliderThumbs({ images }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [isDesktop, setIsDesktop] = useState()
+
+  const updateMedia = () => {
+    setIsDesktop(window.innerWidth > 1000);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
 
   const handleSwiperClick = useCallback((event) => {
     event.stopPropagation();
@@ -48,7 +58,7 @@ function ImageSliderThumbs({ images }) {
       <Swiper
         onSwiper={setThumbsSwiper}
         spaceBetween={20}
-        slidesPerView={5}
+        slidesPerView={isDesktop ? 5 : 3}
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
@@ -59,7 +69,7 @@ function ImageSliderThumbs({ images }) {
           <SwiperSlide
             key={item}
             style={{
-              width: "100%",
+              width: "200px",
               position: "relative",
               borderRadius: "5px",
               overflow: "hidden",
@@ -87,8 +97,9 @@ const Wrapper = styled.div`
   flex-direction: column;
   row-gap: 20px;
   width: 100%;
-  max-width: ${({ theme }) => theme.container.width.lg};
+  max-width: ${({ theme }) => theme.container.width.md};
   height: auto;
   overflow: hidden;
   z-index: 1000;
+  padding: 50px;
 `;

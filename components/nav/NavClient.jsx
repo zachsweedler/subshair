@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Button } from "../common/Button";
+import { Para } from "@/styles/StyledTypography";
 
 function NavClient({ children, session }) {
   const pathname = usePathname();
@@ -51,7 +52,7 @@ function NavClient({ children, session }) {
             {pathname.startsWith("/sign-up") ||
             pathname.startsWith("/sign-in") ? null : !session ? (
               <SignUpFlex>
-                <Link href="/sign-in">Sign In</Link>
+                <Link href="/sign-in"><Para>Sign In</Para></Link>
                 <Link href="/sign-up">
                   <Button hoverAnimate>Sign Up</Button>
                 </Link>
@@ -95,7 +96,7 @@ const NavBackground = styled.div`
   left: 0;
   right: 0;
   bottom: auto;
-  height: 70px;
+  height: 80px;
   width: 100vw;
   background-color: white;
   justify-content: center;
@@ -129,6 +130,7 @@ const NavFlex = styled.div`
   right: 0;
   width: 100vw;
   z-index: 900;
+  height: 80px;
 `;
 
 const LogoFlex = styled.div`

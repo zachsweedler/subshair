@@ -122,7 +122,7 @@ function MapPreview() {
               style={{
                 width: "300px",
                 right: "-5px",
-                top: "-240px",
+                top: "-250px",
               }}
             />
           </MemoMarker>

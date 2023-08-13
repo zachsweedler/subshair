@@ -48,7 +48,7 @@ export default function DetailPage({ propData, landlordData, session }) {
             images={property.property_images}
         />
         <InfoKey
-          rent={property.property_rent}
+          rent={property.property_rent.toLocaleString()}
           revShare={property.property_rev_share}
           address={property.property_address}
           unitNumber={property.property_unit_number}
@@ -58,7 +58,7 @@ export default function DetailPage({ propData, landlordData, session }) {
           session={session}
         />
         {/* <Divider/>
-          <Estimates
+          <Estimatess
             monthlyRev={`$${monthlyGross}`}
             monthlyCashflow={`$${monthlyNet}`}
             monthlyMargin={`${yearlyNet}%`}
@@ -69,8 +69,8 @@ export default function DetailPage({ propData, landlordData, session }) {
           bathrooms={property.property_bathrooms}
           type={property.property_type}
           furnished={property.property_furnished}
-          squareFtg={property.property_square_footage}
-          lotSize={property.property_lot_size}
+          squareFtg={property.property_square_footage.toLocaleString()}
+          lotSize={property.property_lot_size.toLocaleString()}
           yearBuilt={property.property_year_built}
           market={property.property_city}
           furnishing={property.property_furnishing}

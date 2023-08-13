@@ -110,6 +110,7 @@ const ContentWrapper = styled.div`
   align-items: start;
   row-gap: 50px;
   @media screen and (max-width: 1000px) {
-    padding: 30px;
+    padding: 40px;
+    row-gap: 40px;
   }
 `;

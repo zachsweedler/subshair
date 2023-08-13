@@ -73,16 +73,18 @@ function PortalLayout({ children, user }) {
                   Manage
                 </MenuItem>
               </Link>
+              <Link
+                href="/portal/account"
+                style={{ width: "100%" }}
+              >
+                <MenuItem
+                  selected={isMenuItemSelected("/portal/account")}
+                >
+                  Account
+                </MenuItem>
+              </Link>
             </MenuList>
           </Menu>
-          <Link href="/portal/account">
-            <AvatarWrapper>
-              <Avatar profile={user} />
-              <Para grey style={{ pointerEvents: "none" }}>
-                {user.first_name} {user.last_name}
-              </Para>
-            </AvatarWrapper>
-          </Link>
         </MenuWrapper>
         <PageWrapper
           fitContent={

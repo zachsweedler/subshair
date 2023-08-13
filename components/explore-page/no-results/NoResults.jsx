@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/common/Button";
+import { Flex } from "@/components/common/Flexboxes";
 import { H5, Para } from "@/styles/StyledTypography";
 import { supabaseClient } from "@/utils/supabase";
 import Link from "next/link";
@@ -28,9 +29,10 @@ export default function NoResults () {
   }, []);
 
   return (
+
     <Wrapper isSession={session ? true : false}>
       <TextWrapper>
-        <H5>No Results</H5>
+        <H5 medium>No Results</H5>
         <Para grey>
           Try changing or removing some of your filters or adjusting your search
           area.
@@ -38,15 +40,21 @@ export default function NoResults () {
       </TextWrapper>
       {!loading && !session &&
         <JoinWrapper>
-            <Para>Sign up to get notified about new listings</Para>
+            <JoinCopyWrapper>
+              <Para medium>Stay Updated</Para>
+              <Para grey>Get notified about new listings</Para>
+            </JoinCopyWrapper>
             <Link href="/sign-up">
               <Button hoverAnimate>Sign Up</Button>
             </Link>
         </JoinWrapper>
       }
     </Wrapper>
+ 
   );
 }
+
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -56,8 +64,10 @@ const Wrapper = styled.div`
   background-color: white;
   position: absolute;
   left: 50%;
+  top: 50%;
+  width: 100%;
+  max-width: 450px;
   transform: translate(-50%, -50%);
-  top: ${({isSession})=> isSession ? '90px' : '150px'};
   box-shadow: ${({ theme }) => theme.boxShadow.light};
   border-radius: ${({ theme }) => theme.borderRadius.base};
   z-index: 50;
@@ -68,15 +78,25 @@ const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   justify-content: center;
-  row-gap: 3px;
+  padding: 20px;
 `;
 
 const JoinWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  text-align: center;
+  padding: 20px 30px;
   background-color: ${({ theme }) => theme.colors.nuetral.bgGrey};
   border-radius: ${({ theme }) => theme.borderRadius.base};
 `;
+
+const JoinCopyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 0px;
+  align-items: start;
+  text-align: start;
+`
