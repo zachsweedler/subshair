@@ -140,8 +140,8 @@ function AccountInfoForm({ profile, userEmail }) {
             </SectionWrapper>
           </form>
         </FormikProvider>
-        <Divider />
-        <SectionWrapper>
+        {/* <Divider /> */}
+        {/* <SectionWrapper>
           <H4>Billing</H4>
           <Plan>
             <H5>Plan</H5>
@@ -162,10 +162,10 @@ function AccountInfoForm({ profile, userEmail }) {
               <Para>Coming Soon</Para>
             )}
           </PaymentMethod>
-        </SectionWrapper>
+        </SectionWrapper> */}
         <Divider />
         <SectionWrapper>
-          <Para onClick={handleSignOut} link grey>
+          <Para small onClick={handleSignOut} link grey>
             Sign Out
           </Para>
         </SectionWrapper>

@@ -13,26 +13,11 @@ export const GlobalStyles = createGlobalStyle`
         outline: none;
     }
 
-    html {
-        overflow: hidden;
-    }
-
     body {
         line-height: 1;
         padding: 0;
-        margin: 0;   
-        background-color: transparent;
-        color: black;
-        height: 100%;
-        margin: auto;
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        z-index: 1;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
+        margin: 0; 
+        background-color: white;
     } 
 
     h1 {

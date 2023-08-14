@@ -178,4 +178,7 @@ const InputWrapper = styled.div`
   height: auto;
   width: 100%;
   max-width: 300px;
+  @media screen and (max-width: 1000px) {
+    max-width: 100%;
+  }
 `

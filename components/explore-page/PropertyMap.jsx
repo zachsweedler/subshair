@@ -15,7 +15,6 @@ import NoResults from "./no-results/NoResults";
 import { WebMercatorViewport } from "viewport-mercator-project";
 import { updateFilter } from "@/slices/filterSlice";
 import { useRouter } from "next/navigation";
-import NavClient from "../nav/NavClient";
 
 function PropertyMap() {
   const [properties, setProperties] = useState([]);
@@ -335,6 +334,7 @@ const Wrapper = styled.div`
   width: 100%;
   height: calc(100% - 80px);
   overflow: hidden;
+  position: fixed;
   border-top: ${({ theme }) => theme.border.base};
   @media screen and (max-width: 1000px) {
     margin-top: 0px;

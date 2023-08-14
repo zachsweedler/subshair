@@ -13,11 +13,11 @@ function NavClient({ children, session }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setNavVisible(document.body.scrollTop > 0);
+      setNavVisible(window.scrollY > 0);
     };
-    document.body.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      document.body.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

@@ -167,13 +167,15 @@ const PageWrapper = styled.div`
   align-items: flex-start;
   height: ${(props) => (props.fitContent ? "100%" : "100vh")};
   width: 100%;
-  padding-top: ${({ noPadding }) => (noPadding ? "70px" : "130px")};
+  padding: ${({ noPadding }) => (noPadding ? "0px 50px" : "130px 50px")};
   background-color: ${({ theme }) => theme?.colors?.nuetral?.lightBgGrey};
+  @media screen and (max-width: 900px) {
+    padding: ${({ noPadding }) => (noPadding ? "0px 20px" : "100px 20px")};
+  }
 `;
 
 const PageContent = styled.div`
   display: flex;
-  padding: ${({ noPadding }) => (noPadding ? "0px" : "0px 50px")};
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
