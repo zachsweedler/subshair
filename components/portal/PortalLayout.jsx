@@ -141,7 +141,7 @@ const MenuList = styled.div`
 
 const MenuItem = styled.div`
   display: flex;
-  padding: 15px 20px;
+  padding: 15px 15px;
   align-items: flex-start;
   border-radius: 5px;
   width: 100%;
@@ -170,7 +170,7 @@ const PageWrapper = styled.div`
   padding: ${({ noPadding }) => (noPadding ? "0px 50px" : "130px 50px")};
   background-color: ${({ theme }) => theme?.colors?.nuetral?.lightBgGrey};
   @media screen and (max-width: 900px) {
-    padding: ${({ noPadding }) => (noPadding ? "0px 20px" : "100px 20px")};
+    padding: ${({ noPadding }) => (noPadding ? "0px 20px" : "120px 25px")};
   }
 `;
 

@@ -74,11 +74,13 @@ const MenuWrapper = styled.div`
   flex-direction: column;
   left: 0;
   top: 0;
-  z-index: 1000;
+  bottom: 0;
+  right: 0;
+  z-index: 900;
   background-color: ${({ theme }) => theme?.colors?.white};
   box-shadow: ${({ theme }) => theme?.boxShadow?.light};
   padding: 30px;
-  row-gap: 30px;
+  row-gap: 50px;
 `;
 
 const Menu = styled.div`
@@ -94,12 +96,12 @@ const MenuList = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: flex-start;
-  gap: 30px;
+  gap: 40px;
 `;
 
 const MenuItem = styled.div`
   display: flex;
-  padding: 15px 20px;
+  padding: 15px 15px;
   align-items: flex-start;
   border-radius: 5px;
   width: 100%;
@@ -126,5 +128,5 @@ const Overlay = styled.div`
     right: 0;
     left: 0;
     bottom: 0;
-    z-index: 1000;
+    z-index: 900;
 `

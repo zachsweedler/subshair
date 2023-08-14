@@ -5,26 +5,37 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import PortalSideMenuMobile from "../PortalSideMenuMobile";
 
-export default function PageNav({ title, children, breadcrumb, breadcrumbLink, top}) {
-
-
-  const [visible, setVisible] = useState()
+export default function PageNav({
+  title,
+  children,
+  breadcrumb,
+  breadcrumbLink,
+  top,
+}) {
+  const [visible, setVisible] = useState();
 
   const handleToggleClick = () => {
-    setVisible(!visible)
-  }
-
+    setVisible(!visible);
+  };
 
   return (
     <Wrapper breadcrumb={breadcrumb} top={top}>
       <TitleWrapper>
-      <SideMenuToggle onClick={handleToggleClick}>
-        <img src='/menu-icon-black.svg' alt='' height={15} width={15}/>
-      </SideMenuToggle>
-      {visible && <PortalSideMenuMobile onClick={handleToggleClick}/>}
-        {breadcrumb ? <Link href={breadcrumbLink}>
-            <Para link grey>{breadcrumb}</Para>
-          </Link> : <H5>{title}</H5>}
+        {top && (
+          <SideMenuToggle onClick={handleToggleClick}>
+            <img src="/menu-icon-black.svg" alt="" height={15} width={15} />
+          </SideMenuToggle>
+        )}
+        {visible && <PortalSideMenuMobile onClick={handleToggleClick} />}
+        {breadcrumb ? (
+          <Link href={breadcrumbLink}>
+            <Para link grey>
+              {breadcrumb}
+            </Para>
+          </Link>
+        ) : (
+          <H5>{title}</H5>
+        )}
       </TitleWrapper>
       {children}
     </Wrapper>
@@ -33,13 +44,12 @@ export default function PageNav({ title, children, breadcrumb, breadcrumbLink, t
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme?.colors?.white};
-  border-bottom: ${({theme, top}) => (top ? theme?.border?.base : null)};
-  border-top: ${({theme, top}) => (top ? null : theme?.border?.base)};
+  border-bottom: ${({ theme, top }) => (top ? theme?.border?.base : null)};
+  border-top: ${({ theme, top }) => (top ? null : theme?.border?.base)};
   position: fixed;
-  top: ${({top}) => (top ? 0 : null)};
-  bottom: ${({top}) => (top ? null : 0)};
+  top: ${({ top }) => (top ? 0 : null)};
+  bottom: ${({ top }) => (top ? null : 0)};
   right: 0;
-  z-index: 500;
   width: calc(100% - 272px);
   height: fit-content;
   display: flex;
@@ -47,8 +57,10 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  z-index: 50;
   @media screen and (max-width: 900px) {
     width: 100%;
+    z-index: 20;
   }
 `;
 
@@ -63,8 +75,8 @@ const SideMenuToggle = styled.div`
   height: 40px;
   width: 40px;
   background-color: white;
-  border-radius: ${({theme})=> theme.borderRadius.base};
-  border: ${({theme})=> theme.border.base};
+  border-radius: ${({ theme }) => theme.borderRadius.base};
+  border: ${({ theme }) => theme.border.base};
   align-items: center;
   justify-content: center;
   display: none;
@@ -78,4 +90,4 @@ const SideMenuToggle = styled.div`
   @media screen and (max-width: 900px) {
     display: flex;
   }
-`
+`;

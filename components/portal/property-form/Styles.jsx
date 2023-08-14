@@ -16,6 +16,8 @@ export const Wrapper = styled.div`
   max-width: 700px;
   margin: auto;
   padding-bottom: 130px;
+  position: relative;
+  z-index: auto;
 `;
 
 export const StepWrapper = styled.div`

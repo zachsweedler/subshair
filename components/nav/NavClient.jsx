@@ -101,7 +101,7 @@ const NavBackground = styled.div`
   background-color: white;
   justify-content: center;
   align-items: center;
-  z-index: 600;
+  z-index: 10;
   box-shadow: 0px 2px 1.5px 0px rgba(0, 0, 0, 0.03);
   animation: ${({ isVisible }) => (isVisible ? slideIn : slideOut)} 0s
     ease-in-out forwards;
@@ -124,12 +124,12 @@ const NavFlex = styled.div`
   flex-direction: row;
   gap: 20px;
   position: ${({ pathname }) =>
-    pathname.startsWith("/explore/property/") || pathname === "/explore" ? "static" : "fixed"};
+    pathname.startsWith("/explore/property/") || pathname === "/explore" ? "relative" : "fixed"};
   top: 0;
   left: 0;
   right: 0;
+  z-index: 100;
   width: 100vw;
-  z-index: 900;
   height: 80px;
 `;
 

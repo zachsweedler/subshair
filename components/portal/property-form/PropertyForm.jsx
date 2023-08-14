@@ -25,24 +25,24 @@ function PropertyForm() {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const formRedux = useSelector((state) => state.propertyUpload);
-  const router = useRouter()
-  const params = useSearchParams()
-  const editing = params.get('edit')
+  const router = useRouter();
+  const params = useSearchParams();
+  const editing = params.get("edit");
 
-  useEffect(()=>{
+  useEffect(() => {
     const getUserId = async () => {
       const {
-        data: {user},
-        error
+        data: { user },
+        error,
       } = await supabaseClient.auth.getUser();
       if (error) {
         console.log("Error fetching user id", error);
       } else {
-        setUser(user?.id)
+        setUser(user?.id);
       }
-    }
-    getUserId()
-  },[])
+    };
+    getUserId();
+  }, []);
 
   const validationSchema = yup.object().shape({
     property_full_address: yup
@@ -75,14 +75,13 @@ function PropertyForm() {
       .typeError("Invalid number format")
       .integer("Year can't have a decimal")
       .min(1500, `Year can't be earlier than 1500`)
-      .max(new Date().getFullYear(), `Sorry, it's ${new Date().getFullYear()}, we don't allow time-traveling properties.`)
-      .required('This is a required field'),
-    property_type: yup
-      .string()
-      .required("This is a required field."),
-    property_furnishing: yup
-      .bool()
-      .required("This is a required field."),
+      .max(
+        new Date().getFullYear(),
+        `Sorry, it's ${new Date().getFullYear()}, we don't allow time-traveling properties.`
+      )
+      .required("This is a required field"),
+    property_type: yup.string().required("This is a required field."),
+    property_furnishing: yup.bool().required("This is a required field."),
     property_amenities: yup
       .array()
       .min(3, "Please select up to 3 amenities")
@@ -94,7 +93,7 @@ function PropertyForm() {
     property_images: yup
       .array()
       .min(3, "Please upload at least 3 property images")
-      .required('This field is required.')
+      .required("This field is required."),
   });
 
   const formik = useFormik({
@@ -112,87 +111,105 @@ function PropertyForm() {
       property_furnishing: formRedux.property_furnishing,
       property_amenities: formRedux.property_amenities,
       property_description: formRedux.property_description,
-      property_images: formRedux.property_images
+      property_images: formRedux.property_images,
     },
     validationSchema: validationSchema,
     onSubmit: async () => {
-      const { created_by, created_at, property_status, id, ...rest} = formRedux
-      const { data, error } = await supabaseClient
-        .from('properties')
+      const { created_by, created_at, property_status, id, ...rest } =
+        formRedux;
+      const { error } = await supabaseClient
+        .from("properties")
         .upsert({
           id: formRedux.id,
-          property_status: 'Listed',
-          ...rest
+          property_status: "Listed",
+          ...rest,
         })
-        .select('*');
+        .select("*");
       if (error) {
-        console.log('upsert rest of property data error', error);
+        console.log("upsert rest of property data error", error);
         return;
       }
-      router.push('/portal/landlord/properties')
-    }
-  })
+      router.push("/portal/landlord/properties");
+    },
+  });
 
   return (
     <>
-      <PageNav title={editing ? "Edit Property" : "Create Listing"} top/>
+      <PageNav top title={editing ? "Edit Property" : "Create Listing"} />
+      <PageNav>
+        <Button type="submit" hoverAnimate>
+          {editing ? "Save Changes" : "Create Listing"}
+        </Button>
+      </PageNav>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit} autoComplete="off">
           <Wrapper>
             {/* Location Step */}
             <StepWrapper>
-                <Location dispatch={dispatch} formik={formik} formRedux={formRedux} />
+              <Location
+                dispatch={dispatch}
+                formik={formik}
+                formRedux={formRedux}
+              />
             </StepWrapper>
-            <Divider/>
-             {/* Rooms Step */}
-             <StepWrapper>
-                <Rooms formik={formik} />
+            <Divider />
+            {/* Rooms Step */}
+            <StepWrapper>
+              <Rooms formik={formik} />
             </StepWrapper>
-            <Divider/>
+            <Divider />
             {/* Type Step */}
             <StepWrapper>
-                <Type dispatch={dispatch} formik={formik} />
+              <Type dispatch={dispatch} formik={formik} />
             </StepWrapper>
-            <Divider/>
+            <Divider />
             {/* Year Built Step */}
             <StepWrapper>
-                <Year dispatch={dispatch} formik={formik} />
+              <Year dispatch={dispatch} formik={formik} />
             </StepWrapper>
-            <Divider/>
+            <Divider />
             {/* Size Step */}
             <StepWrapper>
-                <Size  dispatch={dispatch} formik={formik} />
+              <Size dispatch={dispatch} formik={formik} />
             </StepWrapper>
-            <Divider/>
+            <Divider />
             {/* Numbers Step */}
             <StepWrapper>
-                <Payments dispatch={dispatch} formik={formik} />
+              <Payments dispatch={dispatch} formik={formik} />
             </StepWrapper>
-            <Divider/>
+            <Divider />
             {/* Furnishing */}
             <StepWrapper>
-                <Furnishing dispatch={dispatch} formik={formik} />
+              <Furnishing dispatch={dispatch} formik={formik} />
             </StepWrapper>
-            <Divider/>
+            <Divider />
             {/* Amenities */}
             <StepWrapper>
-                <Amenities formRedux={formRedux} dispatch={dispatch} formik={formik} />
+              <Amenities
+                formRedux={formRedux}
+                dispatch={dispatch}
+                formik={formik}
+              />
             </StepWrapper>
-            <Divider/>
+            <Divider />
             {/* Description */}
             <StepWrapper>
-               <Description formRedux={formRedux} dispatch={dispatch} formik={formik} />
+              <Description
+                formRedux={formRedux}
+                dispatch={dispatch}
+                formik={formik}
+              />
             </StepWrapper>
             {/* Images */}
-            <Divider/>
+            <Divider />
             <StepWrapper>
-               <Images dispatch={dispatch} formRedux={formRedux} user={user} formik={formik}/>
+              <Images
+                dispatch={dispatch}
+                formRedux={formRedux}
+                user={user}
+                formik={formik}
+              />
             </StepWrapper>
-            <PageNav>
-              <Button type="submit" hoverAnimate>
-                {editing ? "Save Changes" : "Create Listing"}
-              </Button>
-            </PageNav>
           </Wrapper>
           <FormikErrorFocus
             offset={0}

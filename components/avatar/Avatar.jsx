@@ -62,7 +62,7 @@ function Avatar({ withInfo, withEdit, bigBool, profile, userEmail}) {
   const computedHref = !pathname.startsWith("/portal") && "/portal/landlord/properties"
 
   return (
-    <Flex direction="column" gap="14px" align="center">
+    <Flex direction="column" gap="14px" align="center" position="relative">
       <>
         <Wrapper>
             {computedHref && (
