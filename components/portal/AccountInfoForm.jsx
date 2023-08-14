@@ -17,21 +17,21 @@ function AccountInfoForm({ profile, userEmail }) {
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(null);
   const validationSchema = yup.object().shape({
-    first_name: yup.string().required("This field is required"),
-    last_name: yup.string().required("This field is required"),
+    email: yup.string().required("This field is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       first_name: profile.first_name,
       last_name: profile.last_name,
-      email: userEmail
+      email: userEmail,
     },
     validationSchema: validationSchema,
     onSubmit: async () => {
       setLoading(true);
       setError(null);
       setSuccess(null);
+
       const { error } = await supabaseClient
         .from("profiles")
         .update({
@@ -45,14 +45,12 @@ function AccountInfoForm({ profile, userEmail }) {
         setLoading(false);
       }
 
-      const { error: updateEmailError } = await supabaseClient
-        .auth
-        .updateUser({
-          email: formik.values.email
-      })
+      const { error: updateEmailError } = await supabaseClient.auth.updateUser({
+        email: formik.values.email,
+      });
       if (updateEmailError) {
-        console.log('error updating user email', updateEmailError)
-        setError(error);
+        console.log("error updating user email", updateEmailError);
+        setError(error.message);
         setLoading(false);
       } else {
         setSuccess(true);
@@ -66,7 +64,7 @@ function AccountInfoForm({ profile, userEmail }) {
     setError(null);
     const { error } = await supabaseClient.auth.signOut();
     if (error) {
-      setError(error);
+      setError(error.message);
     } else {
       router.refresh();
     }
@@ -83,7 +81,7 @@ function AccountInfoForm({ profile, userEmail }) {
                 <label>Email</label>
                 <input
                   name="email"
-                  placeholder="email"
+                  placeholder="Email"
                   type="text"
                   value={formik.values.email}
                   onChange={(e) => {
@@ -110,11 +108,6 @@ function AccountInfoForm({ profile, userEmail }) {
                     }}
                     value={formik.values.first_name}
                   />
-                  {formik.touched.first_name && formik.errors.first_name ? (
-                    <Para red small>
-                      {formik.errors.first_name}
-                    </Para>
-                  ) : null}
                 </InputWrapper>
                 <InputWrapper>
                   <label>Last Name</label>
@@ -128,28 +121,22 @@ function AccountInfoForm({ profile, userEmail }) {
                     }}
                     value={formik.values.last_name}
                   />
-                  {formik.touched.last_name && formik.errors.last_name ? (
-                    <Para red small>
-                      {formik.errors.last_name}
-                    </Para>
-                  ) : null}
                 </InputWrapper>
               </TwoInputWrapper>
               {error && <Notification error text={error.message} />}
               {success && (
                 <Notification success text="Profile updated succesfully!" />
               )}
-              <Button
-                hoverAnimate
-                type="submit"
-                disabled={
-                  formik.values.first_name === profile.first_name &&
-                  formik.values.last_name === profile.last_name &&
-                  formik.values.email === userEmail
-                }
-              >
-                {loading ? "Saving..." : "Save Changes"}
-              </Button>
+              {(String(formik.values.first_name || "") !==
+                String(profile.first_name || "") ||
+                String(formik.values.last_name || "") !==
+                  String(profile.last_name || "") ||
+                String(formik.values.email || "") !==
+                  String(userEmail || "")) && (
+                <Button hoverAnimate type="submit">
+                  {loading ? "Saving..." : "Save Changes"}
+                </Button>
+              )}
             </SectionWrapper>
           </form>
         </FormikProvider>

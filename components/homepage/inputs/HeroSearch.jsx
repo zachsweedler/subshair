@@ -2,11 +2,13 @@ import Notification from "@/components/common/Notification";
 import { updateFilter } from "@/slices/filterSlice";
 import { Para } from "@/styles/StyledTypography";
 import { SearchBox } from "@mapbox/search-js-react";
+import { LottiePlayer } from "lottie-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components";
+import loadingAnimation from "../../../public/loading.json"
 
 function HeroSearch() {
   const theme = useTheme();
@@ -15,6 +17,7 @@ function HeroSearch() {
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(null)
   const router = useRouter();
   const ref = useRef();
 
@@ -132,6 +135,7 @@ function HeroSearch() {
 
   const handleCurrentLocation = () => {
       setError(null)
+      setLoading(true)
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           // Success callback
@@ -148,6 +152,7 @@ function HeroSearch() {
             })
           );
           dispatch(updateFilter({ filterName: "searchZoom", value: 15 }));
+          setLoading(false)
           router.push("/explore")
         },
         (error) => {
@@ -213,12 +218,18 @@ function HeroSearch() {
         <CurrentLocation onClick={handleCurrentLocation}>
           <>
             <Para medium>Current Location</Para>
-            <Image
+            {loading ? 
+              <LoadingWrapper>
+                <LottiePlayer animationData={loadingAnimation} loop={true} />
+              </LoadingWrapper>
+            :
+              <Image
               alt=""
               src="/assets/images/icons/map-marker-black.svg"
               width={20}
               height={20}
             />
+            }
           </>
         </CurrentLocation>
       ) : null}
@@ -271,4 +282,19 @@ const CurrentLocation = styled.div`
     cursor: pointer;
     background-color: ${({ theme }) => theme?.colors?.nuetral?.lightBgGrey};
   }
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  width: 50px;
+  height: 40px;
+  padding: 9px 12px 5px 12px;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50px;
+  border-radius: 5px;
 `;

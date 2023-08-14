@@ -13,12 +13,21 @@ export const GlobalStyles = createGlobalStyle`
         outline: none;
     }
 
+    html {
+        overflow: hidden;
+        width: 100%;
+    }
+    
     body {
         line-height: 1;
         padding: 0;
         margin: 0;   
         background-color: white;
         color: black;
+        height: 100%;
+        position: fixed;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
     } 
 
     h1 {

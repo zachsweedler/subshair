@@ -15,6 +15,7 @@ import NoResults from "./no-results/NoResults";
 import { WebMercatorViewport } from "viewport-mercator-project";
 import { updateFilter } from "@/slices/filterSlice";
 import { useRouter } from "next/navigation";
+import NavClient from "../nav/NavClient";
 
 function PropertyMap() {
   const [properties, setProperties] = useState([]);
@@ -334,12 +335,12 @@ const Wrapper = styled.div`
   flex-direction: column;
   row-gap: 0px;
   width: 100%;
-  height: calc(100vh - 80px);
+  height: calc(100% - 80px);
   overflow: hidden;
   border-top: ${({ theme }) => theme.border.base};
   @media screen and (max-width: 1000px) {
     margin-top: 0px;
-    height: calc(100vh - 80px);
+    height: calc(100% - 80px);
   }
 `;
 

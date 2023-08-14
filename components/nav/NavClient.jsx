@@ -25,7 +25,7 @@ function NavClient({ children, session }) {
     <>
       {pathname.startsWith("/portal") ? null : (
         <>
-          {pathname.startsWith("/explore/property/") ? null : (
+          {pathname.startsWith("/explore/property/") || pathname === "/explore" ? null : (
             <NavBackground isVisible={navVisible} />
           )}
           <NavFlex pathname={pathname}>
