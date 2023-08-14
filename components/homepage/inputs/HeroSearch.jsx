@@ -2,7 +2,7 @@ import Notification from "@/components/common/Notification";
 import { updateFilter } from "@/slices/filterSlice";
 import { Para } from "@/styles/StyledTypography";
 import { SearchBox } from "@mapbox/search-js-react";
-import { LottiePlayer } from "lottie-react";
+import LottiePlayer from "lottie-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useRef, useState } from "react";
@@ -278,23 +278,20 @@ const CurrentLocation = styled.div`
   box-shadow: ${({ theme }) => theme?.boxShadow?.light};
   border-radius: ${({ theme }) => theme?.borderRadius?.base};
   border: ${({ theme }) => theme?.border?.base};
+  transition: 0.5s transform cubic-bezier(0.23, 1, 0.320, 1);
   :hover {
     cursor: pointer;
-    background-color: ${({ theme }) => theme?.colors?.nuetral?.lightBgGrey};
+    transform: scale(0.98)
   }
 `;
 
 const LoadingWrapper = styled.div`
   display: flex;
   width: 50px;
-  height: 40px;
+  height: 30px;
   padding: 9px 12px 5px 12px;
   align-items: center;
   justify-content: center;
   background-color: white;
   position: relative;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  top: 50px;
-  border-radius: 5px;
 `;

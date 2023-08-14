@@ -1,13 +1,27 @@
 "use client";
 import { H5, Para } from "@/styles/StyledTypography";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import PortalSideMenuMobile from "../PortalSideMenuMobile";
 
 export default function PageNav({ title, children, breadcrumb, breadcrumbLink, top}) {
+
+
+  const [visible, setVisible] = useState()
+
+  const handleToggleClick = () => {
+    setVisible(!visible)
+  }
+
+
   return (
     <Wrapper breadcrumb={breadcrumb} top={top}>
       <TitleWrapper>
+      <SideMenuToggle onClick={handleToggleClick}>
+        <img src='/menu-icon-black.svg' alt='' height={15} width={15}/>
+      </SideMenuToggle>
+      {visible && <PortalSideMenuMobile onClick={handleToggleClick}/>}
         {breadcrumb ? <Link href={breadcrumbLink}>
             <Para link grey>{breadcrumb}</Para>
           </Link> : <H5>{title}</H5>}
@@ -33,11 +47,35 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  @media screen and (max-width: 900px) {
+    width: 100%;
+  }
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  row-gap: 5px;
-  align-items: start;
+  flex-direction: row;
+  column-gap: 18px;
+  align-items: center;
 `;
+
+const SideMenuToggle = styled.div`
+  height: 40px;
+  width: 40px;
+  background-color: white;
+  border-radius: ${({theme})=> theme.borderRadius.base};
+  border: ${({theme})=> theme.border.base};
+  align-items: center;
+  justify-content: center;
+  display: none;
+  :hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.colors.nuetral.bgGrey};
+  }
+  :focus {
+    border: ${({ theme }) => theme.border.active};
+  }
+  @media screen and (max-width: 900px) {
+    display: flex;
+  }
+`

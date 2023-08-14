@@ -1,31 +1,17 @@
 "use client";
-import { Para } from "@/styles/StyledTypography";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import Avatar from "../avatar/Avatar";
 import { useDispatch } from "react-redux";
 import { clearForm } from "@/slices/uploadSlice";
 import { Divider } from "../common/Divider";
-import { Flex } from "../common/Flexboxes";
 
 function PortalLayout({ children, user }) {
   const pathname = usePathname();
   const params = useParams();
   const dispatch = useDispatch();
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 900);
-
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 900);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
-  });
-
 
   const isMenuItemSelected = (menuItemPath) => {
     return pathname === menuItemPath;
@@ -37,7 +23,6 @@ function PortalLayout({ children, user }) {
 
   return (
     <>
-      { isDesktop ? 
       <MainWrapper>
         <MenuWrapper>
           <Link href="/" style={{padding: "0px 15px"}}>
@@ -104,11 +89,6 @@ function PortalLayout({ children, user }) {
           </PageContent>
         </PageWrapper>
       </MainWrapper>
-      :
-      <Flex width="100vw" height="100vh" align="center" justify="center">
-        <Para>Your screen is too small. Please use a desktop or tablet.</Para>
-      </Flex>
-      }
     </>
   );
 }
@@ -122,9 +102,6 @@ const MainWrapper = styled.div`
   width: 100vw;
   height: auto;
   background-color: ${({ theme }) => theme?.colors?.nuetral?.lightBgGrey};
-  @media screen and (max-width: 900px) {
-    display: none;
-  }
 `;
 
 const MenuWrapper = styled.div`
@@ -141,6 +118,9 @@ const MenuWrapper = styled.div`
   position: sticky;
   top: 0;
   border-right: ${({ theme }) => theme?.border?.base};
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const Menu = styled.div`
@@ -198,17 +178,4 @@ const PageContent = styled.div`
   align-items: flex-start;
   width: 100%;
   height: 100%;
-`;
-
-const AvatarWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: 12px;
-  align-items: center;
-  width: 100%;
-  position: absolute;
-  bottom: 50px;
-  :hover {
-    cursor: pointer;
-  }
 `;

@@ -13,11 +13,11 @@ function NavClient({ children, session }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setNavVisible(window.scrollY > 0);
+      setNavVisible(document.body.scrollTop > 0);
     };
-    window.addEventListener("scroll", handleScroll);
+    document.body.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      document.body.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -52,7 +52,7 @@ function NavClient({ children, session }) {
             {pathname.startsWith("/sign-up") ||
             pathname.startsWith("/sign-in") ? null : !session ? (
               <SignUpFlex>
-                <Link href="/sign-in"><Para link>Sign In</Para></Link>
+                <Link href="/sign-in"><Para>Sign In</Para></Link>
                 <Link href="/sign-up">
                   <Button hoverAnimate>Sign Up</Button>
                 </Link>
@@ -92,7 +92,7 @@ const NavBackground = styled.div`
   position: fixed;
   display: ${({ pathname }) => pathname === "/explore" ? "none" : "flex"};
   flex-direction: column;
-  top: ${({ isVisible }) => (isVisible ? 0 : "-100%")};
+  top: 0;
   left: 0;
   right: 0;
   bottom: auto;

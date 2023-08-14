@@ -52,8 +52,6 @@ function PropertyMap() {
 
 
   useEffect(() => {
-    console.log('latitude', searchLatitude)
-    console.log('longitude', searchLongitude)
     isMounted.current = true;
     return () => (isMounted.current = false);
   }, [properties, searchLatitude, dispatch, searchLongitude, searchZoom]);

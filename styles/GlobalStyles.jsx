@@ -15,17 +15,22 @@ export const GlobalStyles = createGlobalStyle`
 
     html {
         overflow: hidden;
-        width: 100%;
     }
-    
+
     body {
         line-height: 1;
         padding: 0;
         margin: 0;   
-        background-color: white;
+        background-color: transparent;
         color: black;
         height: 100%;
+        margin: auto;
         position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
         overflow-y: scroll;
         -webkit-overflow-scrolling: touch;
     } 
@@ -81,7 +86,7 @@ export const GlobalStyles = createGlobalStyle`
         border: none;
         background-color: black;
         color: white;
-        padding: 10px 12px;
+        padding: 10px 15px;
         border-radius: 5px;
         cursor: pointer;
         font-weight: ${({ theme }) => theme.fontWeights.buttons.base};

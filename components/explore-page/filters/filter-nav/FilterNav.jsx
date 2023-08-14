@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { updateFilter } from "@/slices/filterSlice";
 import { FilterMenuItem, FilterWrapper } from "../Styles";
 import FilterPopup from "../filter-popup/FilterPopup";
+import Image from "next/image";
 
 export default function FilterNav() {
   const theme = useTheme();
@@ -163,7 +164,7 @@ export default function FilterNav() {
           />
         </InputWrapper>
         <FilterMenuItem onClick={handleFilterPopup}>
-          <Para style={{ cursor: "pointer" }}>Filters</Para>
+          <img src='/filter-icon-black.svg' alt='' height={15} width={15}/>
           {showFilterPopup ? <FilterPopup /> : null}
         </FilterMenuItem>
       </FilterWrapper>
