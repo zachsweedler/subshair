@@ -128,7 +128,7 @@ const NavFlex = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 0;
+  z-index: 20;
   width: 100vw;
   height: 80px;
 `;
