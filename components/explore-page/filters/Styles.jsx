@@ -39,7 +39,6 @@ export const FilterMenuItem = styled.div`
   }
 `;
 
-
 // Range Slider Filters (Price, Revenue Share)
 export const Wrapper = styled.div`
   display: flex;

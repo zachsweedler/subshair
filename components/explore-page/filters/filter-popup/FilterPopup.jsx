@@ -22,6 +22,7 @@ export default function FilterPopup ({searchCount, handleFilterSearch}) {
                 <MenuWrapper>
                     <TopBar>
                         <H5>Filters</H5>
+                        <Para grey onClick={handleFilterSearch}>Close</Para>
                     </TopBar>
                     <PriceFilter/>
                     <Divider/>
@@ -47,7 +48,7 @@ export default function FilterPopup ({searchCount, handleFilterSearch}) {
 
 const Overlay = styled.div`
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     position: fixed;
     z-index: 12000;
     top: 0;
@@ -58,12 +59,12 @@ const Overlay = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0px 30px;
 `
 
 const Menu = styled.div`
     max-width: 600px;
     width: 100%;
+    height: 80vh;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -73,16 +74,24 @@ const Menu = styled.div`
     background-color: ${({ theme }) => theme.colors.white};
     border-radius: ${({ theme }) => theme.borderRadius.base};
     overflow: hidden;
+    @media screen and (max-width: 1000px) {
+        max-width: 100%;
+        height: 100%;  
+    }
 `
 
 const MenuWrapper = styled.div`
     max-width: 600px;
     width: 100%;
-    max-height: 80vh; 
+    max-height: 100%; 
     overflow: auto; 
     display: flex;
     flex-direction: column;
     position: relative;
+    @media screen and (max-width: 1000px) {
+        max-width: 100%;
+        height: 100%;  
+    }
 `;
 
 
@@ -99,6 +108,10 @@ const BottomBar = styled.div`
     left: 0;
     border-top: ${({ theme }) => theme.border.base}; ;
     background-color: white;
+    @media screen and (max-width: 1000px) {
+        max-width: 100%;
+        height: 100%;  
+    }
 `
 
 
@@ -116,5 +129,9 @@ const TopBar = styled.div`
     top: 0;
     border-bottom: ${({ theme }) => theme.border.base}; ;
     background-color: white;
+    @media screen and (max-width: 1000px) {
+        max-width: 100%;
+        height: 100%;  
+    }
 `
 

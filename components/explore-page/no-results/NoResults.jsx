@@ -19,6 +19,7 @@ const TextWrapper = styled.div`
   align-items: center;
   text-align: center;
   justify-content: center;
+  white-space: nowrap;
   row-gap: 12px;
   padding: 12px 20px;
   background-color: white;

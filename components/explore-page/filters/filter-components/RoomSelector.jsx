@@ -42,8 +42,8 @@ const Wrapper = styled.div`
 `;
 
 const Option = styled.div`
-  width: auto;
-  height: 100%;
+  width: 50px;
+  height: 50px;
   display: flex;
   padding: 9px 15px;
   border: ${({ theme }) => theme.border.base};

@@ -74,7 +74,7 @@ const theme = {
   },
   fontSizes: {
     psm: "13px",
-    p: "16px",
+    p: "14px",
     h5: "18px",
     h4: "20px",
     h3: "25px",
@@ -82,8 +82,8 @@ const theme = {
     h1: "60px",
     hero: "85px",
     mobile: {
-      psm: "15px",
-      p: "16px",
+      psm: "13px",
+      p: "14px",
       h5: "18px",
       h4: "20x",
       h3: "25px",
