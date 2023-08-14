@@ -19,7 +19,7 @@ const filterSlice = createSlice({
     searchLatitude: null,
     searchZoom: null,
     searchBbox: null,
-    searchFeatureType: null
+    searchFeatureType: null,
   },
   reducers: {
     updateFilter: (state, action) => {
@@ -45,3 +45,4 @@ const filterSlice = createSlice({
 export const { updateFilter, clearFilters } = filterSlice.actions;
 
 export default filterSlice.reducer;
+

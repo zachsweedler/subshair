@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-export default function NoResults () {
+export default function NoResults() {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState();
 
@@ -22,56 +22,55 @@ export default function NoResults () {
         setLoading(false);
       } else {
         setLoading(false);
-        setSession(session)
+        setSession(session);
       }
     };
     getId();
   }, []);
 
   return (
-
     <Wrapper isSession={session ? true : false}>
       <TextWrapper>
-        <H5 medium>No Results</H5>
-        <Para grey>
-          Try changing or removing some of your filters or adjusting your search
-          area.
-        </Para>
-      </TextWrapper>
-      {!loading && !session &&
-        <JoinWrapper>
+        <div>
+          <H5 medium>No Results</H5>
+          <Para grey>
+            Try changing or removing some of your filters or adjusting your
+            search area.
+          </Para>
+        </div>
+        {!loading && !session && (
+          <JoinWrapper>
             <JoinCopyWrapper>
-              <Para medium>Stay Updated</Para>
-              <Para grey>Get notified about new listings</Para>
+              <Para medium>Get Notifed</Para>
+              <Para grey>Sign up to hear about new listings</Para>
             </JoinCopyWrapper>
-            <Link href="/sign-up">
-              <Button hoverAnimate>Sign Up</Button>
+            <Link href="/sign-up" style={{width: "100%"}}>
+              <Button hoverAnimate width="100%">
+                Sign Up
+              </Button>
             </Link>
-        </JoinWrapper>
-      }
+          </JoinWrapper>
+        )}
+      </TextWrapper>
     </Wrapper>
- 
   );
 }
-
-
 
 const Wrapper = styled.div`
   display: flex;
   padding: 30px;
   flex-direction: column;
   position: absolute;
-  background-color: white;
   position: absolute;
   left: 50%;
-  top: 25%;
+  top: 200px;
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
   transform: translate(-50%, -50%);
-  box-shadow: ${({ theme }) => theme.boxShadow.light};
-  border-radius: ${({ theme }) => theme.borderRadius.base};
+  align-items: start;
   z-index: 50;
   row-gap: 30px;
+  height: 300px;
   @media screen and (max-width: 1000px) {
     max-width: calc(100% - 80px);
   }
@@ -84,22 +83,26 @@ const TextWrapper = styled.div`
   text-align: center;
   justify-content: center;
   row-gap: 12px;
+  padding: 40px;
+  row-gap: 30px;
+  background-color: white;
+  box-shadow: ${({ theme }) => theme.boxShadow.light};
+  border-radius: ${({ theme }) => theme.borderRadius.base};
 `;
 
 const JoinWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  padding: 20px 30px;
+  padding: 40px;
+  width: 100%;
+  height: auto;
+  background-color: white;
   background-color: ${({ theme }) => theme.colors.nuetral.bgGrey};
   border-radius: ${({ theme }) => theme.borderRadius.base};
-  @media screen and (max-width: 1000px) {
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    padding: 20px;
-  }
+  flex-direction: column;
+  align-items: start;
+  row-gap: 20px;
+
 `;
 
 const JoinCopyWrapper = styled.div`
@@ -108,8 +111,4 @@ const JoinCopyWrapper = styled.div`
   row-gap: 0px;
   align-items: start;
   text-align: start;
-  @media screen and (max-width: 1000px) {
-    text-align: center;
-    align-items: center;
-  }
-`
+`;

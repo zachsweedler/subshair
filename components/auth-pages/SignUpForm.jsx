@@ -2,21 +2,20 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Input from "../common/Input";
 import { Flex } from "../common/Flexboxes";
 import * as yup from "yup";
 import Link from "next/link";
-import { H2, H3, Para } from "@/styles/StyledTypography";
+import { H3, Para } from "@/styles/StyledTypography";
 import Notification from "../common/Notification";
 import { useRouter } from "next/navigation";
 import { supabaseClient } from "@/utils/supabase";
 import { Button } from "../common/Button";
+import { ErrorBox, InfoBox } from "./styles/StyledComponets";
 
 function SignUpForm() {
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
-  const router = useRouter();
 
   const validationSchema = yup.object().shape({
     email: yup.string().required("This is a required field"),
@@ -35,41 +34,22 @@ function SignUpForm() {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
     setLoading(true);
     setSuccess(false);
     setError(null);
-    supabaseClient.auth
-      .signUp({
-        email: formData.email,
-        password: formData.password,
-      })
-      .then(({ error }) => {
-        if (error) {
-          console.log(error);
-          setError(error.message);
-          setLoading(false);
-        } else {
-          setError(false);
-          setLoading(false);
-          setSuccess(true);
-        }
-      })
-      .catch((error) => {
-        console.error("Error signing up:", error);
-        setSuccess(false);
-      });
-  };
-
-  const handleShowHide = () => {
-    setPassType((prevPassType) =>
-      prevPassType === "password" ? "text" : "password"
-    );
-    setIconRight((prevIcon) =>
-      prevIcon === "/assets/images/icons/show-icon-black.svg"
-        ? "/assets/images/icons/hide-icon-black.svg"
-        : "/assets/images/icons/show-icon-black.svg"
-    );
+    const { data } = await supabaseClient.auth.signUp({
+      email: formData.email,
+      password: formData.password
+    })
+    if (data.user && data.user.identities && data.user.identities?.length === 0) {
+      setError("Account already exists");
+      setLoading(false);
+      setSuccess(false);
+    } else {
+      setLoading(false);
+      setSuccess(true);
+    }
   };
 
   return (
@@ -79,11 +59,7 @@ function SignUpForm() {
           <H3>Create an Account</H3>
         </Flex>
         {success ? (
-          <Flex>
-            <Para>
-              Please check your email&apos;s inbox to confirm your address.
-            </Para>
-          </Flex>
+          <InfoBox>Please check your email&apos;s inbox to confirm your address.</InfoBox>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)}>
             <Flex direction="column" rowGap="20px">
@@ -122,6 +98,7 @@ function SignUpForm() {
               <Button hoverAnimate onClick={handleSubmit(onSubmit)}>
                 {loading ? "Creating Account..." : "Create Account"}
               </Button>
+              {error && <ErrorBox>{error}</ErrorBox>}
             </Flex>
           </form>
         )}
@@ -143,3 +120,4 @@ function SignUpForm() {
 }
 
 export default SignUpForm;
+

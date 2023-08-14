@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { supabaseClient } from "@/utils/supabase";
 import ExploreMarker from "@/components/explore-page/marker/MapMarker";
 import { useDispatch, useSelector } from "react-redux";
-import _, { set } from "lodash";
+import _ from "lodash";
 import Lottie from "lottie-react";
 import loadingAnimation from "../../public/loading.json";
 import PropertyCard from "../property-cards/PropertyCard";
@@ -21,9 +21,15 @@ function PropertyMap() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
   const [view, setView] = useState({});
+  const [mapWidth, setMapWidth] = useState();
+  const [mapHeight, setMapHeight] = useState();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const sizeRef = useRef(null);
+  const mapRef = useRef(null);
+  const isMounted = useRef(true);
 
-  // filter redux states
+  // map camera related redux states
   const searchLatitude = useSelector((state) => state.filter.searchLatitude);
   const searchLongitude = useSelector((state) => state.filter.searchLongitude);
   const searchZoom = useSelector((state) => state.filter.searchZoom);
@@ -31,6 +37,8 @@ function PropertyMap() {
   const searchFeatureType = useSelector(
     (state) => state.filter.searchFeatureType
   );
+
+  // filter related redux states
   const rentMax = useSelector((state) => state.filter.rentMax);
   const rentMin = useSelector((state) => state.filter.rentMin);
   const revShareMax = useSelector((state) => state.filter.revShareMax);
@@ -40,19 +48,15 @@ function PropertyMap() {
   const beds = useSelector((state) => state.filter.bedrooms);
   const baths = useSelector((state) => state.filter.bathrooms);
   const amenities = useSelector((state) => state.filter.amenities);
-  const dispatch = useDispatch();
-  const [mapWidth, setMapWidth] = useState();
-  const [mapHeight, setMapHeight] = useState();
-  const [mapLoaded, setMapLoaded] = useState();
-  const router = useRouter();
-  const mapRef = useRef(null);
-  const isMounted = useRef(true);
+
 
   useEffect(() => {
-    console.log('properties', properties)
+    console.log('latitude', searchLatitude)
+    console.log('longitude', searchLongitude)
     isMounted.current = true;
     return () => (isMounted.current = false);
-  }, [properties]);
+  }, [properties, searchLatitude, dispatch, searchLongitude, searchZoom]);
+
 
   // fit bounds of region on searchbox select.
   useEffect(() => {
@@ -66,7 +70,6 @@ function PropertyMap() {
         } else {
           map.fitBounds(searchBbox);
         }
-        setMapLoaded(true)
       } else {
         // This ensures the map is fully loaded before trying to manipulate it.
         map.on("load", () => {
@@ -86,7 +89,6 @@ function PropertyMap() {
       if (currentMapRef) {
         const map = currentMapRef.getMap();
         map.off("load");
-        setMapLoaded(false)
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,7 +221,9 @@ function PropertyMap() {
             }
           );
           const filteredProps = filterProperties(propsInView);
-          setProperties(filteredProps);
+          if (filteredProps) {
+            setProperties(filteredProps);
+          }
           setLoading(false);
         }
       } catch (error) {
@@ -261,13 +265,18 @@ function PropertyMap() {
           mapStyle="mapbox://styles/subshair/cl811pk9h004w14pfyw49lodp"
           boxZoom={true}
           ref={mapRef}
+          initialViewState={{
+            longitude: searchLongitude || -98.5795,
+            latitude: searchLatitude || 39.8283,
+            zoom: searchZoom || 4.125
+          }}
         >
           {loading && (
             <LoadingWrapper>
               <Lottie animationData={loadingAnimation} loop={true} />
             </LoadingWrapper>
           )}
-          {properties && properties.length > 0 ? (
+          {properties.length > 0 ? (
             properties.map((item, index) => (
               <div key={index}>
                 <Marker
@@ -283,7 +292,7 @@ function PropertyMap() {
               </div>
             ))
           ) : (
-             <NoResults />
+            !loading && <NoResults />
           )}
           {selected && !loading && (
             <Popup
@@ -327,11 +336,10 @@ const Wrapper = styled.div`
   width: 100%;
   height: calc(100vh - 80px);
   overflow: hidden;
-  margin-top: 80px;
   border-top: ${({ theme }) => theme.border.base};
   @media screen and (max-width: 1000px) {
     margin-top: 0px;
-    height: 100vh;
+    height: calc(100vh - 80px);
   }
 `;
 

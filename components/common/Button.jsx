@@ -7,8 +7,9 @@ export const Button = styled.button `
       white ? theme.colors.white :
       theme.colors.black
     )};
-    color: ${({ theme, grey, white }) => (
+    color: ${({ theme, grey, darkGrey, white }) => (
       grey ? theme.colors.grey :
+      darkGrey ? theme.colors.darkGrey :
       white ? theme.colors.black :
       theme.colors.white
     )};

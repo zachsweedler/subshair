@@ -82,8 +82,8 @@ const theme = {
     h1: "60px",
     hero: "85px",
     mobile: {
-      psm: "10px",
-      p: "12px",
+      psm: "12px",
+      p: "14px",
       h5: "14px",
       h4: "18x",
       h3: "20px",
@@ -117,7 +117,7 @@ const theme = {
   },
   lineHeight: {
     psmall: "1.3",
-    p: "1.55",
+    p: "1.8",
     h5: "1.4",
     h4: "1.6",
     h3: "1.4",

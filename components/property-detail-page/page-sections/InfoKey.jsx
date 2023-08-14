@@ -53,7 +53,7 @@ function InfoKey({
             <H4>{revShare}%</H4>
           </NumbersRow>
         </NumbersWrapper>
-        <Button onClick={handleContactClick}>Contact Landlord</Button>
+        <Button hoverAnimate onClick={handleContactClick}>Contact Landlord</Button>
         {showContactPopup && (
           <ContactLandlord
             email={landlordData.email}

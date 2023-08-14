@@ -1,18 +1,22 @@
+import Notification from "@/components/common/Notification";
 import { updateFilter } from "@/slices/filterSlice";
+import { Para } from "@/styles/StyledTypography";
 import { SearchBox } from "@mapbox/search-js-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useCallback, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled, { useTheme } from "styled-components";
 
 function HeroSearch() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const [hideCurrentLocation, setHideCurrentLocation] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [processingData, setProcessingData] = useState(true);
+  const [error, setError] = useState(null)
   const router = useRouter();
-  const isMounted = useRef(true); // Reference to track if the component is still mounted
+  const ref = useRef();
 
   const autoFillTheme = {
     variables: {
@@ -34,13 +38,16 @@ function HeroSearch() {
             padding: 15px 15px;
             display: flex;
             width: 100%;
+            flex-shrink: 0;
             height: auto;
             font-size: ${theme?.fontSizes?.h5} !important;
-            box-shadow:  ${theme?.boxShadow?.light}
+        }
+        .SearchBox {
+          display: flex;
+          width: 100%;
         }
         .Input:focus {
           border: none !important;
-          box-shadow:  ${theme?.boxShadow?.light}
         }
         .ResultsAttribution {
             display: none !important;
@@ -54,14 +61,6 @@ function HeroSearch() {
     `,
   };
 
-  useEffect(() => {
-    isMounted.current = true; // set to true when component mounts
-    return () => {
-      isMounted.current = false; // set to false when component unmounts
-    };
-  }, []);
-
-
   // handle search box menu item selection
   const handleRetrieve = useCallback(
     async (res) => {
@@ -69,8 +68,6 @@ function HeroSearch() {
         console.error("Invalid response object:", res);
         return;
       }
-      setProcessingData(true);
-      console.log("res", res);
       const feature = res.features[0];
       const bbox = feature?.properties?.bbox;
       const latitude = feature?.geometry?.coordinates[1];
@@ -81,7 +78,6 @@ function HeroSearch() {
       const inputValue =
         feature?.properties?.name +
         `, ${feature?.properties?.context?.region?.name}`;
-      if (isMounted.current) {
         dispatch(
           updateFilter({
             filterName: "searchLatitude",
@@ -129,53 +125,127 @@ function HeroSearch() {
           feature?.properties?.name +
             `, ${feature?.properties?.context?.region?.name}`
         );
-        setProcessingData(false);
-      }
-    },
-    [dispatch]
+        router.push("/explore")
+      },
+    [dispatch, router]
   );
 
-  useEffect(() => {
-    console.log(processingData);
-    if (isMounted.current && !processingData) {
-      router.push("/explore");
+  const handleCurrentLocation = () => {
+      setError(null)
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          // Success callback
+          dispatch(
+            updateFilter({
+              filterName: "searchLatitude",
+              value: pos.coords.latitude,
+            })
+          );
+          dispatch(
+            updateFilter({
+              filterName: "searchLongitude",
+              value: pos.coords.longitude,
+            })
+          );
+          dispatch(updateFilter({ filterName: "searchZoom", value: 15 }));
+          router.push("/explore")
+        },
+        (error) => {
+          // Error callback
+          setError("Unable to fetch your current location")
+          console.error("Error fetching geolocation:", error); 
+        }
+      );
+  }
+
+  const handleInput = (event) => {
+    console.log(event);
+    setInputValue(event);
+    if (event === "") {
+      setHideCurrentLocation(false);
+    } else {
+      setHideCurrentLocation(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [processingData]);
+  };
 
   return (
-    <InputWrapper>
-      <SearchBox
-        placeholder="Enter a city or address..."
-        accessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
-        theme={autoFillTheme}
-        onRetrieve={handleRetrieve}
-        value={inputValue}
-        options={{
-          language: "en",
-          types: "city,address,neighborhood",
-          country: "US",
-        }}
-      />
-      <Adornment>
-        <Image
-          alt=""
-          src="/assets/images/icons/search-icon-black.svg"
-          width={20}
-          height={20}
+    <>
+    <Wrapper>
+      <InputWrapper>
+        <input
+          style={{
+            position: "absolute",
+            left: "0",
+            zIndex: "100",
+            opacity: "0%",
+          }}
+          onFocus={() => {
+            ref.current?.focus();
+            setIsFocused(true);
+            setHideCurrentLocation(false);
+          }}
         />
-      </Adornment>
-    </InputWrapper>
+        <SearchBox
+          ref={ref}
+          placeholder="Enter a city or address..."
+          accessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
+          theme={autoFillTheme}
+          onRetrieve={handleRetrieve}
+          onSuggest={() => setHideCurrentLocation(true)}
+          value={inputValue}
+          onChange={handleInput}
+          options={{
+            language: "en",
+            types: "city,address,neighborhood",
+            country: "US",
+          }}
+        />
+        <Adornment>
+          <Image
+            alt=""
+            src="/assets/images/icons/search-icon-black.svg"
+            width={20}
+            height={20}
+          />
+        </Adornment>
+      </InputWrapper>
+      {!hideCurrentLocation && isFocused ? (
+        <CurrentLocation onClick={handleCurrentLocation}>
+          <>
+            <Para medium>Current Location</Para>
+            <Image
+              alt=""
+              src="/assets/images/icons/map-marker-black.svg"
+              width={20}
+              height={20}
+            />
+          </>
+        </CurrentLocation>
+      ) : null}
+    </Wrapper>
+    {error && <Notification error text={error} />}
+    </>
   );
 }
 
 export default HeroSearch;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  width: 100%;
+  align-items: center;
+  @media screen and (max-width: 1000px) {
+    align-items: start;
+  }
+`;
 const InputWrapper = styled.div`
   position: relative;
   height: auto;
   width: 100%;
   max-width: 500px;
+  align-items: center;
 `;
 
 const Adornment = styled.div`
@@ -183,4 +253,22 @@ const Adornment = styled.div`
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
+`;
+
+const CurrentLocation = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 15px 15px;
+  background-color: white;
+  box-shadow: ${({ theme }) => theme?.boxShadow?.light};
+  border-radius: ${({ theme }) => theme?.borderRadius?.base};
+  border: ${({ theme }) => theme?.border?.base};
+  :hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme?.colors?.nuetral?.lightBgGrey};
+  }
 `;

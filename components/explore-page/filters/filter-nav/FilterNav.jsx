@@ -62,7 +62,6 @@ export default function FilterNav() {
         console.error("Invalid response object:", res);
         return;
       }
-      console.log("res", res);
       const feature = res.features[0];
       const bbox = feature?.properties?.bbox;
       const latitude = feature?.geometry?.coordinates[1];

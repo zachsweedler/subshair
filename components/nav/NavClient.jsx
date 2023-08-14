@@ -52,7 +52,7 @@ function NavClient({ children, session }) {
             {pathname.startsWith("/sign-up") ||
             pathname.startsWith("/sign-in") ? null : !session ? (
               <SignUpFlex>
-                <Link href="/sign-in"><Para>Sign In</Para></Link>
+                <Link href="/sign-in"><Para link>Sign In</Para></Link>
                 <Link href="/sign-up">
                   <Button hoverAnimate>Sign Up</Button>
                 </Link>
@@ -90,7 +90,7 @@ const slideOut = keyframes`
 
 const NavBackground = styled.div`
   position: fixed;
-  display: flex;
+  display: ${({ pathname }) => pathname === "/explore" ? "none" : "flex"};
   flex-direction: column;
   top: ${({ isVisible }) => (isVisible ? 0 : "-100%")};
   left: 0;
@@ -124,7 +124,7 @@ const NavFlex = styled.div`
   flex-direction: row;
   gap: 20px;
   position: ${({ pathname }) =>
-    pathname.startsWith("/explore/property/") ? "static" : "fixed"};
+    pathname.startsWith("/explore/property/") || pathname === "/explore" ? "static" : "fixed"};
   top: 0;
   left: 0;
   right: 0;

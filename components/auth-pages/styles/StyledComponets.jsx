@@ -25,3 +25,18 @@ export const GridItem = styled.div`
     justify-content: start;
   }
 `;
+
+export const ErrorBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  border-radius: ${({theme})=> theme.borderRadius.base};
+  font-size: ${({theme})=> theme.fontSizes.psm};
+  background-color: ${({theme})=> theme.colors.alerts.error.light.background};
+  color: ${({theme})=> theme.colors.alerts.error.light.text};
+`
+
+export const InfoBox = styled(ErrorBox)`
+    background-color: ${({theme})=> theme.colors.alerts.info.light.background};
+    color: ${({theme})=> theme.colors.alerts.info.light.text};
+`

@@ -46,7 +46,7 @@ export default function DetailPage({ propData, landlordData, session }) {
           <ImagesGrid
             onClick={(index) => showSlider(index)}
             images={property.property_images}
-        />
+          />
         <InfoKey
           rent={property.property_rent.toLocaleString()}
           revShare={property.property_rev_share}

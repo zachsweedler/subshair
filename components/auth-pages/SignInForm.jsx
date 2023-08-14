@@ -10,6 +10,7 @@ import { supabaseClient } from "@/utils/supabase";
 import { Button } from "../common/Button";
 import * as yup from 'yup'
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ErrorBox } from "./styles/StyledComponets";
 
 function SignInForm({overlay, onClick}) {
   const [error, setError] = useState(null);
@@ -96,6 +97,7 @@ function SignInForm({overlay, onClick}) {
               <Button hoverAnimate type="submit">
                 {loading ? "Signing in..." : "Sign In"}
               </Button>
+              {error && <ErrorBox>{error.message}</ErrorBox>}
             </Flex>
           </form>
         </Flex>

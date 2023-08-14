@@ -63,6 +63,9 @@ export const Amenity = styled.div`
   :hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 1000px) {
+    font-size: ${({ theme }) => theme.fontSizes.psm};
+  }
 `
 
 export const ImageDropZone = styled.div`

@@ -37,7 +37,7 @@ const Content = styled.div`
     align-items: start;
     text-align: left;
     padding: 170px 30px 100px 30px;
-    height: 85vh;
+    height: 80vh;
   }
 `;
 

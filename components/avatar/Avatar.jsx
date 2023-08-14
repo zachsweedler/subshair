@@ -16,10 +16,6 @@ function Avatar({ withInfo, withEdit, bigBool, profile, userEmail}) {
   const [newVersion, setNewVersion] = useState(null);
   const id = profile?.id;
   const pathname = usePathname();
-
-  useEffect(()=>{
-    console.log('user email', userEmail)
-  },[userEmail])
   
   const handleEditClick = () => avatarInputRef.current.click();
 

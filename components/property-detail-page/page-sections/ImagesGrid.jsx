@@ -5,12 +5,21 @@ import Image from "next/image";
 import { Button } from "@/components/common/Button";
 
 function ImagesGrid({ images, onClick }) {
-
   return (
     <>
       <ImageGrid>
-        {images?.map((item) => (
-          <div key={item} style={{ overflow: "hidden" }}>
+        {images?.map((item, index) => (
+          <div
+            key={item}
+            style={{ overflow: "hidden" }}
+            className={
+              index === 0
+                ? "two-row-span"
+                : index === 1 || index === 2
+                ? "one-row-span"
+                : "other-rows"
+            }
+          >
             <ImageWrapper onClick={onClick}>
               <Image
                 alt="property-image"
@@ -23,9 +32,15 @@ function ImagesGrid({ images, onClick }) {
           </div>
         ))}
         <Button
+          darkGrey
           hoverAnimate
           white
-          style={{ position: "absolute", bottom: "0", right: "0", margin: "0px 30px 30px 0px"}}
+          style={{
+            position: "absolute",
+            bottom: "0",
+            right: "0",
+            margin: "0px 25px 25px 0px",
+          }}
           onClick={onClick}
         >
           See All Photos
@@ -39,18 +54,31 @@ export default ImagesGrid;
 
 const ImageGrid = styled.div`
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 5px;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 5px;
   margin-bottom: 40px;
   height: 512px;
   width: 100%;
-  border-radius: 10px;
   position: relative;
   overflow: hidden;
-  @media screen and (max-width: 1000px){
+  border-radius: 10px;
+  .two-row-span {
+    grid-row: span 2;
+  }
+  .other-rows {
+    display: none;
+  }
+  @media screen and (max-width: 1000px) {
     grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     height: 400px;
+    .other-rows {
+      display: none;
+    }
+    .one-row-span {
+      display: none;
+    }
   }
 `;
 

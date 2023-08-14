@@ -21,10 +21,6 @@ function FeaturedList() {
     fetchFeaturedProps();
   }, []);
 
-  useEffect(() => {
-    console.log("fetched data", fetchedData && fetchedData);
-  }, [fetchedData]);
-
   return (
     <Wrapper>
       {fetchedData?.map((item) => (
